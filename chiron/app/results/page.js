@@ -1,0 +1,80 @@
+'use client';
+
+import { useClassification } from '../context';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Header from '../header';
+import Footer from '../footer';
+import Image from 'next/image';
+
+export default function ResultPage() {
+  const { classificationResult, submittedText } = useClassification();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!classificationResult) {
+      router.push('/');
+    }
+  }, [classificationResult]);
+
+  if (!classificationResult) return null;
+
+  const { news_type, authenticity, error } = classificationResult;
+
+  const isHealth = news_type?.toLowerCase() === 'health';
+  const isFake = isHealth && authenticity?.toLowerCase() === 'fake';
+  const isAuthentic = isHealth && authenticity?.toLowerCase() === 'authentic';
+
+  const getMessage = () => {
+    if (error) return `⚠️ Error occurred: ${error}`;
+    if (isFake) return '⚠️ This health article may contain misinformation. Verify with trusted sources.';
+    if (isAuthentic) return '✅ This page contains reliable health information.';
+    return 'ℹ️ The article is classified as general news.';
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 to-white">
+      <Header />
+
+      <div className="text-center text-gray-700 mt-15">
+        <h1 className="text-3xl font-bold">CHIRON</h1>
+        <p className="text-sm">Leveraging technology for public health education.</p>
+      </div>
+
+      <main className="flex justify-center px-6 mt-10 mb-10">
+        <div className="border border-gray-300 rounded-xl p-6 bg-white w-full max-w-7xl">
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            {news_type && (
+              <span className="px-3 py-1 rounded-md bg-green-600 text-white text-sm font-medium">
+                News Type: {news_type}
+              </span>
+            )}
+            {isFake && <span className="px-3 py-1 rounded-md bg-red-500 text-white text-sm font-medium">Fake News!</span>}
+            {isAuthentic && (
+              <span className="px-3 py-1 rounded-md bg-green-500 text-white text-sm font-medium">Authentic</span>
+            )}
+          </div>
+
+          <p className="mb-4 text-gray-700">{getMessage()}</p>
+
+          <div className="mt-6">
+            <div className="flex gap-4 items-start border rounded bg-gray-50 p-4">
+              <Image
+                src={isFake ? '/fake.png' : isAuthentic ? '/authentic.png' : '/general.png'}
+                alt={isFake ? 'Fake news' : isAuthentic ? 'Authentic news' : 'General news'}
+                width={600}
+                height={600}
+                className="object-cover rounded-md"
+              />
+              <div className="relative w-200 h-90 overflow-y-auto">
+                <p className="text-gray-800 whitespace-pre-line">{submittedText}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+};
