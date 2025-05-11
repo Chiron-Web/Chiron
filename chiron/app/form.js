@@ -13,6 +13,7 @@ export default function ClassificationForm() {
   const router = useRouter();
 
   const { setClassificationResult, setSubmittedText } = useClassification();
+
   const handleSubmit = async (e) => {
       e.preventDefault();
       setLoading(true);
@@ -44,13 +45,18 @@ export default function ClassificationForm() {
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 to-white">
       <Header />
 
-      <div className="text-center text-gray-700 mt-20">
+      <div className="text-center text-gray-700 mt-20 flex items-center justify-center">
+        <img
+          src="/logo-black.png"  // Ensure this is a black logo image
+          alt="CHIRON Logo"
+          className="w-10 h-10 mr-2"  // Ensure the logo is beside the title
+        />
         <h1 className="text-3xl font-bold">CHIRON</h1>
-        <p className="text-sm">Leveraging technology for public health education.</p>
       </div>
+      <p className="text-sm text-center mt-2 text-gray-700">Leveraging technology for public health education.</p>
 
       <div className="flex-grow flex items-center justify-center px-4">
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-4xl">
           {/* URL input */}
           <div className="flex items-center border border-gray-300 rounded px-3 py-2 mb-3">
             <input
@@ -60,7 +66,7 @@ export default function ClassificationForm() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
             />
-            <span className="ml-2 text-gray-500">🔍</span>
+            <img src="/search.png" alt="Search Icon" className="ml-2 w-5 h-5" />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-2 mb-2">
@@ -80,6 +86,7 @@ export default function ClassificationForm() {
               {loading ? (
                 <div className="flex justify-center items-center">
                   <div className="w-4 h-4 border-4 border-t-4 border-white rounded-full animate-spin"></div>
+                  <span>Classifying News...</span>
                 </div>
               ) : (
                 'Classify News'

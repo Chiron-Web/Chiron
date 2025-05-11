@@ -35,11 +35,16 @@ export default function ResultPage() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 to-white">
       <Header />
-
-      <div className="text-center text-gray-700 mt-15">
+      <div className="text-center text-gray-700 mt-20 flex items-center justify-center">
+        <img
+          src="/logo-black.png"  // Ensure this is a black logo image
+          alt="CHIRON Logo"
+          className="w-10 h-10 mr-2"  // Ensure the logo is beside the title
+        />
         <h1 className="text-3xl font-bold">CHIRON</h1>
-        <p className="text-sm">Leveraging technology for public health education.</p>
       </div>
+      <p className="text-sm text-center mt-2 text-gray-700">Leveraging technology for public health education.</p>
+
 
       <main className="flex justify-center px-6 mt-10 mb-10">
         <div className="border border-gray-300 rounded-xl p-6 bg-white w-full max-w-7xl">
