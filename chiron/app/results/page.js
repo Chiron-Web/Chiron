@@ -1,10 +1,10 @@
 'use client';
 
-import { useClassification } from '../context';
+import { useClassification } from '../components/context';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Header from '../header';
-import Footer from '../footer';
+import Header from '../components/header';
+import Footer from '../components/footer';
 import Image from 'next/image';
 
 export default function ResultPage() {

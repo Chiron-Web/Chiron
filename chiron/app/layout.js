@@ -17,7 +17,7 @@ export const metadata = {
 };
 
 // app/layout.jsx or app/page.jsx
-import { ClassificationProvider } from './context';
+import { ClassificationProvider } from './components/context';
 
 export default function RootLayout({ children }) {
   return (

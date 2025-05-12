@@ -1,4 +1,4 @@
-import ClassificationForm from './form';
+import ClassificationForm from './components/form';
 
 export default function Home() {
   return (

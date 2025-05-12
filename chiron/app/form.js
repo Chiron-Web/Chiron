@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useClassification } from './context';
-import Header from './header';
-import Footer from './footer';
+import { useClassification } from './components/context';
+import Header from './components/header';
+import Footer from './components/footer';
 
 export default function ClassificationForm() {
   const [text, setText] = useState('');
