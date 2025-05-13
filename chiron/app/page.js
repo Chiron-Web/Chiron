@@ -1,9 +1,9 @@
-import ClassificationForm from './components/form';
+import Homepage from "./components/homepage";
 
 export default function Home() {
   return (
     <main>
-      <ClassificationForm />
+      <Homepage />
     </main>
   );
 }

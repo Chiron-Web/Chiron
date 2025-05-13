@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -29,16 +31,23 @@ export default function Header() {
   });
 
   return (
-    <div className="header py-6 relative bg-sky-950 text-white shadow-md h-15">
-      <div className="flex items-center absolute top-2 left-10">
-        {/* Logo */}
+    <div className="header py-4 px-10 bg-sky-950 text-white shadow-md flex items-center justify-between">
+      {/* Left: Logo */}
+      <div className="flex items-center">
         <img src="/logo.png" alt="CHIRON Logo" className="w-10 h-10 mr-2" />
-        {/* CHIRON text */}
-        <h1 className="name text-l font-bold text-gray-300">CHIRON</h1>
+        <h1 className="name text-lg font-bold text-gray-300">CHIRON</h1>
       </div>
 
+      {/* Center: Navigation Links */}
+      <nav className="flex gap-8 text-sm">
+        <Link href="/" className="text-gray-200 hover:text-white">Home</Link>
+        <Link href="/verify" className="text-gray-200 hover:text-white">Verify News</Link>
+        <Link href="/about" className="text-gray-200 hover:text-white">About Us</Link>
+      </nav>
+
+      {/* Right: Clock */}
       {hasMounted && (
-        <div className="clock text-sm absolute top-2 right-10 text-right text-gray-200">
+        <div className="text-sm text-right text-gray-200">
           {formattedDate}
           <br />
           {formattedTime}
