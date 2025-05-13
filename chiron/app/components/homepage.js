@@ -1,11 +1,39 @@
-'use client';
 
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import Header from './header';
 import Footer from './footer';
+import { useRouter } from 'next/navigation';
 
 export default function Homepage() {
   const [url, setUrl] = useState('');
+  const [articles, setArticles] = useState([]);
+  const router = useRouter();
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (url) {
+      // Redirect to the form page and pass the URL as a query parameter
+      router.push(`/verify?url=${encodeURIComponent(url)}`);
+    }
+  };
+
+  useEffect(() => {
+    async function fetchArticles() {
+      try {
+        const response = await fetch('http://localhost:8080/api/news/articles?page=2&pageSize=9');
+        const data = await response.json();
+        if (data.success) {
+          // Only get first 9 articles
+          setArticles(data.articles.slice(0, 9));
+        }
+      } catch (err) {
+        console.error('Error fetching articles:', err);
+      }
+    }
+
+    fetchArticles();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 to-white">
@@ -28,37 +56,61 @@ export default function Homepage() {
       <div className="flex-grow flex items-center justify-center px-4">
         <div className="w-full max-w-6xl">
           {/* URL input */}
-          <div className="flex items-center border border-gray-300 rounded px-3 py-2 mb-6">
+          <form onSubmit={handleSearchSubmit} className="flex items-center border border-gray-300 rounded px-3 py-2 mb-6">
             <input
               type="url"
               placeholder="Paste URL here"
-              className="w-full text-base text-gray-700 focus:outline-none"
+              className="flex-grow text-base text-gray-700 focus:outline-none"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
             />
-            <img src="/search.png" alt="Search Icon" className="ml-2 w-5 h-5" />
-          </div>
+            <button type="submit" className="ml-2 px-4 py-2 bg-blue-500 text-white rounded">
+                {/* <img src="/search.png" alt="Search Icon" className="ml-2 w-5 h-5" /> */}
+                Verify
+            </button>
+          </form>
+          
 
           {/* Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div
-                key={i}
-                className="bg-white rounded shadow overflow-hidden hover:shadow-md transition-shadow"
+            {articles.map((article, i) => (
+              <a
+                key={article._id || i}
+                href={article.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white rounded shadow overflow-hidden hover:shadow-md transition-shadow block"
               >
                 <img
-                  src={`/news${i + 1}.jpg`}
-                  alt={`News ${i + 1}`}
-                  className="w-full h-40 object-cover"
+                  src={`https://www.google.com/s2/favicons?domain=${new URL(article.url).hostname}&sz=64`}
+                  alt={`Favicon`}
+                  className="w-full h-40 object-cover bg-gray-100"
                 />
                 <div className="p-4 text-sm text-gray-800">
-                  <h3 className="font-semibold">News Title</h3>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                    do eiusmod tempor incididunt...
+                  <div className="flex justify-between items-center mb-1">
+                    <h3 className="font-semibold text-base line-clamp-2">
+                      {article.title}
+                    </h3>
+                    {article.classification?.status === 'success' && (
+                      <span className="text-green-600 text-xs border border-green-600 px-2 py-0.5 rounded-full">
+                        Verified
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-gray-600 text-xs mb-2">
+                    {(() => {
+                      const parsedDate = new Date(article.date);
+                      return isNaN(parsedDate)
+                        ? String(article.date)
+                        : parsedDate.toLocaleDateString();
+                    })()}
+                  </p>
+
+                  <p className="line-clamp-3">
+                    {article.content}
                   </p>
                 </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
