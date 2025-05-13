@@ -45,32 +45,30 @@ export default function ResultPage() {
       </div>
       <p className="text-sm text-center mt-2 text-gray-700">Leveraging technology for public health education.</p>
 
-
       <main className="flex justify-center px-6 mt-10 mb-10">
         <div className="border border-gray-300 rounded-xl p-6 bg-white w-full max-w-7xl">
-        <div className="flex flex-wrap items-center gap-2 mb-4">
-          {news_type && (
-            <span className="px-3 py-1 rounded-md bg-green-600 text-white text-sm font-medium">
-              News Type: {news_type}
-            </span>
-          )}
-          {isFake && (
-            <span className="px-3 py-1 rounded-md bg-red-500 text-white text-sm font-medium">
-              Fake News!
-            </span>
-          )}
-          {isAuthentic && (
-            <span className="px-3 py-1 rounded-md bg-green-500 text-white text-sm font-medium">
-              Authentic
-            </span>
-          )}
-          {(isFake || isAuthentic) && authenticity_confidence !== undefined && (
-            <span className="px-3 py-1 rounded-md bg-blue-500 text-white text-sm font-medium">
-              Confidence: {(authenticity_confidence * 100).toFixed(2)}%
-            </span>
-          )}
-        </div>
-
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            {news_type && (
+              <span className="px-3 py-1 rounded-md bg-slate-500 text-white text-sm font-medium">
+                News Type: {news_type}
+              </span>
+            )}
+            {isFake && (
+              <span className="px-3 py-1 rounded-md bg-red-500 text-white text-sm font-medium">
+                Fake News!
+              </span>
+            )}
+            {isAuthentic && (
+              <span className="px-3 py-1 rounded-md bg-green-500 text-white text-sm font-medium">
+                Authentic
+              </span>
+            )}
+            {(isFake || isAuthentic) && authenticity_confidence !== undefined && (
+              <span className="px-3 py-1 rounded-md bg-blue-500 text-white text-sm font-medium">
+                Confidence: {(authenticity_confidence * 100).toFixed(2)}%
+              </span>
+            )}
+          </div>
 
           <p className="mb-4 text-gray-700">{getMessage()}</p>
 
@@ -89,8 +87,18 @@ export default function ResultPage() {
             </div>
           </div>
         </div>
+        
       </main>
-
+      {/* Back to Home Button (Outside the Card) */}
+      {/* Centered Back to Home Button */}
+      <div className="flex justify-center mt-2 mb-3">
+        <button
+          onClick={() => router.push('/')}
+          className="flex items-center justify-center text-black text-lg font-medium"
+        >
+          <span className="mr-2">← Back to Home</span>
+        </button>
+      </div>
       <Footer />
     </div>
   );

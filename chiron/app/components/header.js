@@ -31,7 +31,7 @@ export default function Header() {
   });
 
   return (
-    <div className="header py-4 px-10 bg-sky-950 text-white shadow-md flex items-center justify-between">
+    <div className="header py-8 px-10 bg-sky-950 text-white shadow-md flex items-center justify-between">
       {/* Left: Logo */}
       <div className="flex items-center">
         <img src="/logo.png" alt="CHIRON Logo" className="w-10 h-10 mr-2" />
@@ -39,15 +39,15 @@ export default function Header() {
       </div>
 
       {/* Center: Navigation Links */}
-      <nav className="flex gap-8 text-sm">
-        <Link href="/" className="text-gray-200 hover:text-white">Home</Link>
-        <Link href="/verify" className="text-gray-200 hover:text-white">Verify News</Link>
-        <Link href="/about" className="text-gray-200 hover:text-white">About Us</Link>
+      <nav className="flex gap-20 text-lg">
+        <Link href="/" className="text-gray-300 hover:text-white">Home</Link>
+        <Link href="/verify" className="text-gray-300 hover:text-white">Verify News</Link>
+        <Link href="/about" className="text-gray-300 hover:text-white">About Us</Link>
       </nav>
 
       {/* Right: Clock */}
       {hasMounted && (
-        <div className="text-sm text-right text-gray-200">
+        <div className="text-lg text-right text-gray-200">
           {formattedDate}
           <br />
           {formattedTime}
