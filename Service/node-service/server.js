@@ -7,7 +7,7 @@ const path = require('path');
 const cors = require('cors');
 const app = express();
 const { fetchAndStoreArticles, getPaginatedArticles } = require('./controllers/newsController');
-const port = 6000;
+const port = 8080;
 
 // Middleware
 app.use(cors());

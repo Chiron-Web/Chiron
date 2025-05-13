@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useClassification } from './context';
 import Header from './header';
@@ -14,6 +14,15 @@ export default function ClassificationForm() {
   const router = useRouter();
 
   const { setClassificationResult, setSubmittedText } = useClassification();
+
+  // Get URL from query parameters on component mount
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const fetchedUrl = queryParams.get('url');
+    if (fetchedUrl) {
+      setUrl(fetchedUrl); // Set URL if it exists in the query params
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
