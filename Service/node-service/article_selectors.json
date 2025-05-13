@@ -1,0 +1,110 @@
+{
+    "selectors": {
+      "abs-cbn.com": {
+        "content": "#bodyTopPart p",
+        "date": ".MuiBox-root.css-dx346o span",
+        "author": ".MuiBox-root.css-yi3mkw .MuiTypography-root.MuiTypography-h4.MuiTypography-gutterBottom.css-1wrc8e8"
+      },
+      "clinicaladvisor.com": {
+        "content": ".post-content .wysiwyg p",
+        "author": ".author-info"
+      },
+      "discovermagazine.com": {
+        "content": ".sc-426c7a0c-0.kFFBpt p"
+      },
+      "health.harvard.edu": {
+        "content": ".content-repository-content",
+        "date": "time[datetime]",
+        "author": "address a[rel='author']"
+      },
+      "medicalnewstoday.com": {
+        "title": "h1",
+        "author": "p.css-cbz3gh a",
+        "date": "time[data-testid='article-published-date']"
+      },
+      "webmd.com": {
+        "content": ".article__body p"
+      },
+      "dailyhealthpost.com": {
+        "content": "section.entry-wrap"
+      },
+      "foodbabe.com": {
+        "content": ".entry-content p",
+        "date": ".publish-date",
+        "author": ".fn"
+      },
+      "food.news": {
+        "content": "#Article p",
+        "date": ".publish-date",
+        "author": ".fn"
+      },
+      "goop.com": {
+        "content": ".post__the-content .cont-basic__text",
+        "author": ".publish-details .goop-author",
+        "date": ".publish-details .detail-item:last-child"
+      },
+      "healthimpactnews.com": {
+        "content": ".post-content p",
+        "date": ".publish-date",
+        "author": "address a[rel='author']"
+      },
+      "infowars.com": {
+        "content": ".article-details p"
+      },
+      "abc.net.au": {
+        "content": ".ArticleRender_article__7i2EW p",
+        "date": ".ArticleHeadlineTitle_meta__eYg46 time",
+        "author": ".sc-801dd632-0.eSlECZ .sc-801dd632-7.lasLGY"
+      },
+      "theatlantic.com": {
+        "content": ".sc-3b6b161a-0.dEGcKf p",
+        "date": ".sc-801dd632-0.eSlECZ .sc-801dd632-2.IvNnh",
+        "author": ".sc-801dd632-0.eSlECZ .sc-801dd632-7.lasLGY"
+      },
+      "bbc.com": {
+        "content": ".sc-3b6b161a-0.dEGcKf p",
+        "date": ".sc-801dd632-0.eSlECZ .sc-801dd632-2.IvNnh",
+        "author": ".sc-801dd632-0.eSlECZ .sc-801dd632-7.lasLGY"
+      },
+      "gmanetwork.com": {
+        "content": ".story_main p",
+        "author": ".main-byline",
+        "date": ".article-time"
+      }
+    },
+    "fallback": {
+      "content": [
+        "article p",
+        ".article-body p",
+        ".post-content p",
+        ".entry-content p",
+        ".story_main p",
+        ".wysiwyg p",
+        "#Article p",
+        ".ArticleRender_article__7i2EW p",
+        ".sc-3b6b161a-0.dEGcKf p",
+        "section.entry-wrap",
+        ".content-repository-content",
+        ".article-details p",
+        ".article-full-body p",
+        ".mol-para-with-font",
+        ".article-body-content p",
+        "#article_content p"
+      ],
+      "author": [
+        "address a[rel='author']",
+        ".author-info",
+        ".fn",
+        ".main-byline",
+        ".byline"
+      ],
+      "date": [
+        "time",
+        "time[datetime]",
+        ".publish-date",
+        ".article-time",
+        "time[data-testid='article-published-date']"
+      ]
+    }
+  }
+  
