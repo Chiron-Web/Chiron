@@ -1,3 +1,5 @@
 /chiron/.next
 /chiron/node_modules
 Service/node-service/.env
+/Service/node-service/node_modules
+/Service/node-service/node_modules

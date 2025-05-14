@@ -9,8 +9,6 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-Service\node-service\node_modules
-node-service\node_modules
 
 # testing
 /coverage
