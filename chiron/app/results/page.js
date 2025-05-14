@@ -27,8 +27,10 @@ export default function ResultPage() {
 
   const getMessage = () => {
     if (error) return `⚠️ Error occurred: ${error}`;
-    if (isFake) return '⚠️ This health article may contain misinformation. Verify with trusted sources.';
-    if (isAuthentic) return '✅ This page contains reliable health information.';
+    if (isFake) return 'This health article may contain misinformation.';
+    if (isAuthentic && authenticity_confidence !== undefined) {
+      return `✅ We are ${(authenticity_confidence * 100).toFixed(2)}% sure this health article is authentic.`;
+    }
     return 'ℹ️ The article is classified as general news.';
   };
 
