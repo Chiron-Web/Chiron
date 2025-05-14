@@ -11,8 +11,6 @@ export default function ClassificationForm() {
   const [loading, setLoading] = useState(false);
   const [url, setUrl] = useState('');
   const [scraping, setScraping] = useState(false);
-  const [isLoadingOverlay, setIsLoadingOverlay] = useState(false); // Overlay state
-  const [showSnackbar, setShowSnackbar] = useState(false); // Snackbar state
   const router = useRouter();
 
   const { setClassificationResult, setSubmittedText } = useClassification();
@@ -56,7 +54,6 @@ export default function ClassificationForm() {
   const handleScrape = async () => {
     if (!url) return;
     setScraping(true);
-    setIsLoadingOverlay(true); // Show the overlay when scraping starts
 
     try {
       const response = await fetch('http://localhost:4000/api/scrape', {
@@ -69,36 +66,19 @@ export default function ClassificationForm() {
       const data = await response.json();
       if (data.success && data.content) {
         setText(data.content);
-        setShowSnackbar(false); // Hide snackbar when content is fetched successfully
       } else {
-        setShowSnackbar(true); // Show the snackbar if scraping fails
+        alert('Failed to extract content from the URL');
       }
     } catch (error) {
       alert('Error: ' + error.message);
-      setShowSnackbar(true); // Show the snackbar if there’s an error
     } finally {
       setScraping(false);
-      setIsLoadingOverlay(false); // Hide the overlay once scraping finishes
     }
-  };
-
-  const closeSnackbar = () => {
-    setShowSnackbar(false); // Close the snackbar
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 to-white">
       <Header />
-
-      {/* Loading Overlay */}
-      {isLoadingOverlay && (
-        <div className="absolute inset-0 flex items-center justify-center z-50">
-          <div className="bg-gray-700 bg-opacity-10 p-6 rounded-lg flex items-center justify-center flex-col w-300 h-150">
-            <div className="w-12 h-12 border-4 border-t-4 border-white rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-lg text-white">Fetching content...</p>
-          </div>
-        </div>
-      )}
 
       <div className="text-center text-gray-700 mt-20 flex items-center justify-center">
         <img
@@ -113,7 +93,7 @@ export default function ClassificationForm() {
       </p>
 
       <div className="flex-grow flex items-center justify-center px-4">
-        <div className="w-full max-w-6xl">
+        <div className="w-full max-w-4xl">
           {/* URL input + scrape button */}
           <div className="flex items-center space-x-2 mb-3">
             <input
@@ -159,14 +139,6 @@ export default function ClassificationForm() {
           </form>
         </div>
       </div>
-
-      {/* Snackbar */}
-      {showSnackbar && (
-        <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center justify-between">
-          <span>If the content cannot be fetched from the link, you can paste the content instead.</span>
-          <button onClick={closeSnackbar} className="text-white ml-2">&times;</button>
-        </div>
-      )}
 
       <Footer />
     </div>

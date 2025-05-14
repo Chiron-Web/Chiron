@@ -48,7 +48,7 @@ export default function Homepage() {
         />
         <h1 className="text-3xl font-bold">CHIRON</h1>
       </div>
-      <p className="text-sm text-center mt-2 mb-7 text-gray-700">
+      <p className="text-sm text-center mt-2 text-gray-700">
         Leveraging technology for public health education.
       </p>
 
@@ -84,7 +84,7 @@ export default function Homepage() {
                 <img
                   src={`https://www.google.com/s2/favicons?domain=${new URL(article.url).hostname}&sz=64`}
                   alt={`Favicon`}
-                  className="w-full h-25 object-cover bg-gray-100"
+                  className="w-full h-40 object-cover bg-gray-100"
                 />
                 <div className="p-4 text-sm text-gray-800">
                   <div className="flex justify-between items-center mb-1">
