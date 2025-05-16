@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from 'react';
 import Header from './header';
 import Footer from './footer';
@@ -8,38 +6,49 @@ import { useRouter } from 'next/navigation';
 export default function Homepage() {
   const [url, setUrl] = useState('');
   const [articles, setArticles] = useState([]);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+
   const router = useRouter();
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (url) {
-      // Redirect to the form page and pass the URL as a query parameter
       router.push(`/verify?url=${encodeURIComponent(url)}`);
     }
   };
 
-  useEffect(() => {
-    async function fetchArticles() {
-      try {
-        const response = await fetch('http://localhost:8080/api/news/articles?page=2&pageSize=9');
-        const data = await response.json();
-        if (data.success) {
-          // Only get first 9 articles
-          setArticles(data.articles.slice(0, 9));
-        }
-      } catch (err) {
-        console.error('Error fetching articles:', err);
-      }
-    }
+  const fetchArticles = async (pageNum) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`http://localhost:8080/api/news/articles?page=${pageNum}&pageSize=9`);
+      const data = await response.json();
 
-    fetchArticles();
-  }, []);
+      if (data.success && data.articles.length > 0) {
+        setArticles((prev) => [...prev, ...data.articles]);
+        setHasMore(data.articles.length === 9); // assume pageSize=9 means more might be available
+      } else {
+        setHasMore(false);
+      }
+    } catch (err) {
+      console.error('Error fetching articles:', err);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchArticles(page);
+  }, [page]);
+
+  const handleLoadMore = () => {
+    setPage((prev) => prev + 1);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 to-white">
       <Header />
 
-      {/* Logo and tagline */}
       <div className="text-center text-gray-700 mt-20 flex items-center justify-center">
         <img
           src="/logo-black.png"
@@ -52,10 +61,8 @@ export default function Homepage() {
         Leveraging technology for public health education.
       </p>
 
-      {/* URL Input and Cards */}
       <div className="flex-grow flex items-center justify-center px-4">
         <div className="w-full max-w-6xl">
-          {/* URL input */}
           <form onSubmit={handleSearchSubmit} className="flex items-center border border-gray-300 rounded px-3 py-2 mb-6">
             <input
               type="url"
@@ -65,13 +72,10 @@ export default function Homepage() {
               onChange={(e) => setUrl(e.target.value)}
             />
             <button type="submit" className="ml-2 px-4 py-2 bg-blue-500 text-white rounded">
-                {/* <img src="/search.png" alt="Search Icon" className="ml-2 w-5 h-5" /> */}
-                Verify
+              Verify
             </button>
           </form>
-          
 
-          {/* Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {articles.map((article, i) => (
               <a
@@ -83,7 +87,7 @@ export default function Homepage() {
               >
                 <img
                   src={`https://www.google.com/s2/favicons?domain=${new URL(article.url).hostname}&sz=64`}
-                  alt={`Favicon`}
+                  alt="Favicon"
                   className="w-full h-40 object-cover bg-gray-100"
                 />
                 <div className="p-4 text-sm text-gray-800">
@@ -113,6 +117,18 @@ export default function Homepage() {
               </a>
             ))}
           </div>
+
+          {hasMore && (
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={handleLoadMore}
+                disabled={isLoading}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+              >
+                {isLoading ? 'Loading...' : 'Load More'}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
