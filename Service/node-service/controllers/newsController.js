@@ -28,7 +28,6 @@ async function fetchAndStoreArticles() {
   
       console.log('Scraping via API:', article.link);
   
-      // 🔁 Call scraper microservice
       let scraped;
       try {
         const res = await fetch('http://localhost:4000/api/scrape', {
@@ -45,6 +44,13 @@ async function fetchAndStoreArticles() {
       }
   
       if (!scraped || !scraped.content) continue;
+
+      const existsWithNewUrl = await NewsArticle.findOne({ url: scraped.url });
+      console.log("here is the image url: ", scraped.imageUrl);
+      if (existsWithNewUrl) {
+        console.log("We are now at the latest news");
+        break;
+      };
   
       const classification = await classify(scraped.content);
       if (!classification || classification.status !== 'success') {
@@ -53,7 +59,8 @@ async function fetchAndStoreArticles() {
       }
   
       await NewsArticle.create({
-        url: article.link,
+        url: scraped.url,
+        imageUrl: scraped.imageUrl,
         title: scraped.title || article.title,
         author: scraped.author,
         content: scraped.content,

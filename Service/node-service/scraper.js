@@ -51,7 +51,6 @@ async function withBrowser(fn) {
 }
 
 // Main scrape function
-// Main scrape function with improved fallback handling
 async function scrapeUrl(url, browser) {
   const page = await browser.newPage();
   try {
@@ -67,6 +66,7 @@ async function scrapeUrl(url, browser) {
     const hostname = new URL(url).hostname.replace('www.', '');
     const siteSelectors = selectorsJSON.selectors[hostname] || {};
     const fallback = selectorsJSON.fallback;
+    const finalUrl = page.url() || url;
 
     // Enhanced evaluation with proper fallback chaining
     const result = await page.evaluate(({ siteSelectors, fallback }) => {
@@ -85,23 +85,22 @@ async function scrapeUrl(url, browser) {
         return null;
       };
 
+
       const findElements = (selectorConfig, isContent) => {
         const selectorList = Array.isArray(selectorConfig) ? selectorConfig : [selectorConfig];
         
         for (const selector of selectorList) {
           try {
             if (isContent) {
-              const elements = Array.from(document.querySelectorAll(selector))
+              const matchedElements = Array.from(document.querySelectorAll(selector));
+              const textElements = matchedElements
                 .map(el => el.innerText.trim())
                 .filter(text => text.length > 30);
-              
-              if (elements.length > 0) {
-                return elements.join('\n\n');
-              }
-            } else {
-              const element = document.querySelector(selector);
-              if (element && element.innerText.trim().length > 0) {
-                return element.innerText.trim();
+
+              if (textElements.length > 0) {
+                const joinedText = textElements.join('\n\n');
+
+                return joinedText
               }
             }
           } catch (e) {
@@ -110,17 +109,44 @@ async function scrapeUrl(url, browser) {
         }
         return null;
       };
+      const isValidContentImage = (img) => {
+          return img.src && 
+                img.naturalWidth > 300 && 
+                img.naturalHeight > 150 &&
+                !img.src.match(/(logo|icon|spinner|ad|banner|seal)/i);
+        };
+      const extractContentImage = () => {
+        const allImages = Array.from(document.querySelectorAll('img'));
+        let bestImage = { src: null, size: 0 };
+
+        allImages.forEach(img => {
+          if (!isValidContentImage(img)) return;
+          
+          const size = img.naturalWidth * img.naturalHeight;
+          if (size > bestImage.size) {
+            bestImage = {
+              src: img.src.startsWith('http') ? img.src : 
+                  new URL(img.src, window.location.href).toString(),
+              size: size
+            };
+          }
+        });
+
+        return bestImage.src;
+      };
 
       // Get metadata with fallbacks
       const title = document.title || evaluateSelector('title') || findElements(['h1', 'h2']);
       const author = evaluateSelector('author');
       const date = evaluateSelector('date');
       const content = evaluateSelector('content', true);
-
+      const imageUrl = extractContentImage();
+        
       return {
         title,
         author,
         date,
+        imageUrl,
         content
       };
     }, { siteSelectors, fallback });
@@ -131,14 +157,13 @@ async function scrapeUrl(url, browser) {
     }
 
     return {
-      url,
+      url: finalUrl,
       success: true,
       ...result,
       error: null
     };
   } catch (error) {
     return {
-      url,
       success: false,
       content: null,
       title: null,
