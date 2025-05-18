@@ -116,12 +116,20 @@ async function scrapeUrl(url, browser) {
       const author = evaluateSelector('author');
       const date = evaluateSelector('date');
       const content = evaluateSelector('content', true);
+      const image = (() => {
+      const metaImage = document.querySelector('meta[property="og:image"]')?.content 
+        || document.querySelector('meta[name="twitter:image"]')?.content;
+      const contentImage = document.querySelector('article img, main img')?.src;
+
+      return metaImage || contentImage || null;
+    })();
 
       return {
         title,
         author,
         date,
-        content
+        content,
+        image
       };
     }, { siteSelectors, fallback });
 
@@ -134,8 +142,10 @@ async function scrapeUrl(url, browser) {
       url,
       success: true,
       ...result,
+      image: result.image || null,
       error: null
     };
+
   } catch (error) {
     return {
       url,

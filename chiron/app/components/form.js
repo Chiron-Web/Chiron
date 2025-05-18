@@ -64,9 +64,12 @@ export default function ClassificationForm() {
 
       if (!response.ok) throw new Error('Failed to fetch content');
       const data = await response.json();
-      if (data.success && data.content) {
-        setText(data.content);
-      } else {
+    if (data.success && data.content) {
+      setText(data.content);
+      if (data.image) {
+        localStorage.setItem('articleImage', data.image);  // Temporarily store image
+      }
+    } else {
         alert('Failed to extract content from the URL');
       }
     } catch (error) {
