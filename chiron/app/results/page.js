@@ -89,7 +89,7 @@ export default function ResultPage() {
                   className="object-cover rounded-md w-full"
                 />
                 
-                {articleImage && isAuthentic && (
+                {isAuthentic && (
                   <img
                     src="/authentic_label.png"
                     alt="Authentic Label"
@@ -97,7 +97,7 @@ export default function ResultPage() {
                   />
                 )}
 
-                {articleImage && isFake && (
+                {isFake && (
                   <img
                     src="/fake_label.png"
                     alt="Fake Label"
