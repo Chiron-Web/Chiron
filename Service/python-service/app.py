@@ -2,15 +2,22 @@ from flask import Flask, request, jsonify
 from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
 import torch
 from nltk.tokenize import sent_tokenize
-import nltk
-nltk.download('punkt')
 from flask_cors import CORS
+import nltk
+import os
+
+# Set a temporary directory for NLTK data
+nltk_data_path = "/tmp/nltk_data"
+os.makedirs(nltk_data_path, exist_ok=True)
+
+nltk.download("punkt", download_dir=nltk_data_path)
+nltk.data.path.append(nltk_data_path)
 
 app = Flask(__name__)
 CORS(app)  # This enables CORS for all domains on all routes
 
 # Load models and tokenizers
-health_model_path = "./distilbert_model5"
+health_model_path = "./distilbert_model6"
 general_model_path = "./general_model"
 
 # Load tokenizers
