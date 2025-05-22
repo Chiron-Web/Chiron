@@ -8,7 +8,7 @@ CORS(app)  # Enable CORS for all domains
 
 # Load models and tokenizers
 health_model_path = "rabidpurson/chironBERT"
-general_model_path = "./general_model"
+general_model_path = "rabidpurson/generalChironBERT"
 
 health_tokenizer = DistilBertTokenizer.from_pretrained(health_model_path)
 general_tokenizer = DistilBertTokenizer.from_pretrained(general_model_path)
