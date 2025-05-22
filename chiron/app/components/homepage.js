@@ -22,7 +22,7 @@ export default function Homepage() {
   const fetchArticles = async (pageNum) => {
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:8080/api/news/articles?page=${pageNum}&pageSize=9`);
+      const response = await fetch(`https://chiron-news.onrender.com/news/articles?page=${pageNum}&pageSize=9`);
       const data = await response.json();
 
       if (data.success && data.articles.length > 0) {
