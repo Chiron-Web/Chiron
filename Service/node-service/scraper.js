@@ -4,19 +4,16 @@ const Papa = require('papaparse');
 const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
+
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
 // Load selector config
-const selectorsJSON = JSON.parse(
-  fs.readFileSync(path.join(__dirname, 'article_selectors.json'), 'utf-8')
-);
+const selectorsJSON = JSON.parse(fs.readFileSync(path.join(__dirname, 'article_selectors.json'), 'utf-8'));
 
-// Clean-up selectors for ads, popups, etc.
 const selectorsToRemove = [
   '.entry-title', '.em-mod-video', '.anchortext', '.module.ad',
   '.emb-center-well-ad', '.up-show', '.bg-gray-50.border-t.border-b',
@@ -27,41 +24,28 @@ const selectorsToRemove = [
   '.bg-gray-50', '.border-t.border-b.border-gray-400', '.px-6.py-10'
 ];
 
-// Extract selectors for a given URL
-function getSelectorsForUrl(url) {
-  const hostname = new URL(url).hostname.replace('www.', '');
-  return selectorsJSON.selectors[hostname] || selectorsJSON.fallback;
-}
+let browser = null;
 
-// Delay function
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-// Error handling wrapper
-async function withBrowser(fn) {
-  let browser;
-  try {
-    browser = await puppeteer.launch({ 
+// Lazy initialize and reuse Puppeteer browser
+async function initBrowser() {
+  if (!browser || !browser.isConnected()) {
+    console.log("Launching Puppeteer...");
+    browser = await puppeteer.launch({
       headless: true,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--single-process'
-      ],
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      executablePath: '/usr/bin/google-chrome-stable'
     });
-    return await fn(browser);
-  } finally {
-    if (browser) await browser.close();
   }
+  return browser;
 }
 
-// Main scrape function
-async function scrapeUrl(url, browser) {
+async function scrapeUrl(url) {
+  const browser = await initBrowser();
   const page = await browser.newPage();
   try {
     await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
 
-    // Clean unwanted elements
+    // Clean the page
     await page.evaluate((selectors) => {
       selectors.forEach(selector => {
         document.querySelectorAll(selector).forEach(el => el.remove());
@@ -71,18 +55,28 @@ async function scrapeUrl(url, browser) {
     const hostname = new URL(url).hostname.replace('www.', '');
     const siteSelectors = selectorsJSON.selectors[hostname] || {};
     const fallback = selectorsJSON.fallback;
-    const finalUrl = page.url() || url;
 
-    // Enhanced evaluation with proper fallback chaining
     const result = await page.evaluate(({ siteSelectors, fallback }) => {
       const evaluateSelector = (type, isContent = false) => {
-        // Try site-specific selectors first
+        const findElements = (selectorConfig, isContent) => {
+          const selectorList = Array.isArray(selectorConfig) ? selectorConfig : [selectorConfig];
+          for (const selector of selectorList) {
+            try {
+              if (isContent) {
+                const matchedElements = Array.from(document.querySelectorAll(selector));
+                const textElements = matchedElements.map(el => el.innerText.trim()).filter(t => t.length > 30);
+                if (textElements.length > 0) return textElements.join('\n\n');
+              }
+            } catch (_) {}
+          }
+          return null;
+        };
+
         if (siteSelectors[type]) {
-          const elements = findElements(siteSelectors[type], isContent);
-          if (elements) return elements;
+          const result = findElements(siteSelectors[type], isContent);
+          if (result) return result;
         }
 
-        // Then try fallback selectors
         if (fallback[type]) {
           return findElements(fallback[type], isContent);
         }
@@ -90,49 +84,24 @@ async function scrapeUrl(url, browser) {
         return null;
       };
 
-
-      const findElements = (selectorConfig, isContent) => {
-        const selectorList = Array.isArray(selectorConfig) ? selectorConfig : [selectorConfig];
-        
-        for (const selector of selectorList) {
-          try {
-            if (isContent) {
-              const matchedElements = Array.from(document.querySelectorAll(selector));
-              const textElements = matchedElements
-                .map(el => el.innerText.trim())
-                .filter(text => text.length > 30);
-
-              if (textElements.length > 0) {
-                const joinedText = textElements.join('\n\n');
-
-                return joinedText
-              }
-            }
-          } catch (e) {
-            console.warn(`Error evaluating selector ${selector}:`, e);
-          }
-        }
-        return null;
-      };
       const isValidContentImage = (img) => {
-          return img.src && 
-                img.naturalWidth > 300 && 
-                img.naturalHeight > 150 &&
-                !img.src.match(/(logo|icon|spinner|ad|banner|seal)/i);
-        };
+        return img.src &&
+          img.naturalWidth > 300 &&
+          img.naturalHeight > 150 &&
+          !img.src.match(/(logo|icon|spinner|ad|banner|seal)/i);
+      };
+
       const extractContentImage = () => {
         const allImages = Array.from(document.querySelectorAll('img'));
         let bestImage = { src: null, size: 0 };
 
         allImages.forEach(img => {
           if (!isValidContentImage(img)) return;
-          
           const size = img.naturalWidth * img.naturalHeight;
           if (size > bestImage.size) {
             bestImage = {
-              src: img.src.startsWith('http') ? img.src : 
-                  new URL(img.src, window.location.href).toString(),
-              size: size
+              src: img.src.startsWith('http') ? img.src : new URL(img.src, window.location.href).toString(),
+              size
             };
           }
         });
@@ -140,70 +109,82 @@ async function scrapeUrl(url, browser) {
         return bestImage.src;
       };
 
-      // Get metadata with fallbacks
-      const title = document.title || evaluateSelector('title') || findElements(['h1', 'h2']);
+      const title = document.title || evaluateSelector('title') || null;
       const author = evaluateSelector('author');
       const date = evaluateSelector('date');
       const content = evaluateSelector('content', true);
       const imageUrl = extractContentImage();
-        
+
       return {
         title,
         author,
         date,
-        imageUrl,
-        content
+        content,
+        imageUrl
       };
     }, { siteSelectors, fallback });
 
-    // Validate results
-    if (!result.content) {
-      throw new Error(`No content found after evaluating all selectors for ${hostname}`);
-    }
+    if (!result.content) throw new Error(`No content found after evaluating selectors for ${hostname}`);
 
     return {
-      url: finalUrl,
       success: true,
+      url: page.url(),
       ...result,
-      image: result.image || null,
+      image: result.imageUrl || null,
       error: null
     };
-
   } catch (error) {
     return {
       success: false,
-      content: null,
+      url,
       title: null,
       author: null,
       date: null,
+      content: null,
+      image: null,
       error: error.message
     };
   } finally {
     await page.close();
   }
 }
-// API Endpoints
 
-// Single URL scraping
+// API endpoint: scrape
 app.post('/scrape', async (req, res) => {
   try {
     const { url } = req.body;
-    console.log("Processing this URL: ", url);
-    if (!url) {
-      return res.status(400).json({ error: 'URL is required' });
-    }
+    if (!url) return res.status(400).json({ error: 'Missing URL' });
 
-    const result = await withBrowser(async (browser) => {
-      return await scrapeUrl(url, browser);
-    });
-
+    console.log('Scraping:', url);
+    const result = await scrapeUrl(url);
     res.json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// Start server
+// Health check endpoint
+app.get('/status', async (req, res) => {
+  try {
+    const active = browser && browser.isConnected();
+    res.json({
+      puppeteer_status: active ? "connected" : "not connected",
+      status: "healthy"
+    });
+  } catch (e) {
+    res.status(500).json({ status: "unhealthy", error: e.message });
+  }
+});
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  if (browser) {
+    console.log("Closing Puppeteer...");
+    await browser.close();
+  }
+  process.exit();
+});
+
 app.listen(port, () => {
-  console.log(`Scraping API server running on ${port}`);
+  console.log(`Scraper API running on port ${port}`);
 });
