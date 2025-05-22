@@ -1,0 +1,9 @@
+# render.yaml
+services:
+  - type: web
+    name: Chiron-Scraper  # Replace with your service name
+    env: python  # or node if using Node.js
+    buildCommand: ./build.sh  # Your custom build script (see below)
+    startCommand: node scraper  # or "node app.js" for Node
+    plan: free  # or "starter", "standard" for paid plans
+    buildTimeoutSec: 600  # 10 mins (Chrome install can be slow)

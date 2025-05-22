@@ -42,7 +42,13 @@ async function withBrowser(fn) {
   try {
     browser = await puppeteer.launch({ 
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'] // For Docker/CI environments
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--single-process'
+      ],
+      executablePath: '/usr/bin/google-chrome-stable'
     });
     return await fn(browser);
   } finally {
