@@ -14,7 +14,6 @@ app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
 }).then(() => {
   console.log('Connected to MongoDB');
   app.use('/api/news', require('./routes/newsRoutes'));
@@ -23,6 +22,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Start server
 app.listen(port, () => {
-  console.log(`BACKEND server running on http://localhost:${port}`);
+  console.log(`BACKEND server running on ${port}`);
 });
 

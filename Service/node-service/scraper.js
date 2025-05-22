@@ -180,7 +180,7 @@ async function scrapeUrl(url, browser) {
 // API Endpoints
 
 // Single URL scraping
-app.post('/api/scrape', async (req, res) => {
+app.post('/scrape', async (req, res) => {
   try {
     const { url } = req.body;
     console.log("Processing this URL: ", url);
@@ -200,5 +200,5 @@ app.post('/api/scrape', async (req, res) => {
 
 // Start server
 app.listen(port, () => {
-  console.log(`Scraping API server running on http://localhost:${port}`);
+  console.log(`Scraping API server running on ${port}`);
 });
