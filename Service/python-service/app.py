@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)  # Enable CORS for all domains
 
 # Load models and tokenizers
-health_model_path = "./distilbert_model6"
+health_model_path = "rabidpurson/chironBERT"
 general_model_path = "./general_model"
 
 health_tokenizer = DistilBertTokenizer.from_pretrained(health_model_path)
