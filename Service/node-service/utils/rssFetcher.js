@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const { fetch } = require('node-undici');
 const { XMLParser } = require('fast-xml-parser');
 
 async function fetchGoogleHealthNewsRSS() {
