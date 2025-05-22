@@ -2,7 +2,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const cron = require('node-cron');
-const { fetchAndStoreArticles } = require('./tasks/fetchNewsJob');
+const { fetchAndStoreArticles } = require('../controllers/newsController');
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
