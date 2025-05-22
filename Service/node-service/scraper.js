@@ -160,8 +160,10 @@ async function scrapeUrl(url, browser) {
       url: finalUrl,
       success: true,
       ...result,
+      image: result.image || null,
       error: null
     };
+
   } catch (error) {
     return {
       success: false,

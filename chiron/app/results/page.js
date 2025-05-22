@@ -1,15 +1,22 @@
 'use client';
 
 import { useClassification } from '../components/context';
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '../components/header';
 import Footer from '../components/footer';
-import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 export default function ResultPage() {
   const { classificationResult, submittedText } = useClassification();
   const router = useRouter();
+
+  const [articleImage, setArticleImage] = useState(null);
+
+    useEffect(() => {
+      setArticleImage(localStorage.getItem('articleImage'));
+      return () => localStorage.removeItem('articleImage'); // Clean up
+    }, []);
+
 
   useEffect(() => {
     if (!classificationResult) {
@@ -70,20 +77,35 @@ export default function ResultPage() {
             </span>
           )}
         </div>
-
-
           <p className="mb-4 text-gray-700">{getMessage()}</p>
-
           <div className="mt-6">
             <div className="flex gap-4 items-start border rounded bg-gray-50 p-4">
-              <Image
-                src={isFake ? '/fake.png' : isAuthentic ? '/authentic.png' : '/general.png'}
-                alt={isFake ? 'Fake news' : isAuthentic ? 'Authentic news' : 'General news'}
-                width={600}
-                height={600}
-                className="object-cover rounded-md"
-              />
-              <div className="relative w-200 h-90 overflow-y-auto">
+              <div className="relative w-[600px] h-auto">
+                <img
+                  src={articleImage || (isFake ? '/fake.png' : isAuthentic ? '/authentic.png' : '/general.png')}
+                  alt="Article Preview"
+                  width={600}
+                  height={400}
+                  className="object-cover rounded-md w-full"
+                />
+                
+                {isAuthentic && (
+                  <img
+                    src="/authentic_label.png"
+                    alt="Authentic Label"
+                    className="absolute top-2 right-2 w-24 h-24 opacity-90"
+                  />
+                )}
+
+                {isFake && (
+                  <img
+                    src="/fake_label.png"
+                    alt="Fake Label"
+                    className="absolute top-2 right-2 w-24 h-24 opacity-90"
+                  />
+                )}
+              </div>
+              <div className="relative max-w-[600px] max-h-[400px] overflow-y-auto">
                 <p className="text-gray-800 whitespace-pre-line">{submittedText}</p>
               </div>
             </div>
