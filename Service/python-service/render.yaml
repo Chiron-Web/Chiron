@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: chiron-flask-api
+    runtime: python
+    buildCommand: ""
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT
+    workingDir: Service/python-service
+    region: oregon
+    plan: free
+    envVars:
+      - key: TRANSFORMERS_CACHE
+        value: /var/cache/huggingface

@@ -2,19 +2,24 @@ from flask import Flask, request, jsonify
 from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
 import torch
 from flask_cors import CORS
+from functools import lru_cache
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all domains
 
-# Load models and tokenizers
-health_model_path = "rabidpurson/chironBERT"
-general_model_path = "rabidpurson/generalChironBERT"
 
-health_tokenizer = DistilBertTokenizer.from_pretrained(health_model_path)
-general_tokenizer = DistilBertTokenizer.from_pretrained(general_model_path)
+@lru_cache()
+def get_general_model():
+    tokenizer = DistilBertTokenizer.from_pretrained("rabidpurson/generalChironBERT")
+    model = DistilBertForSequenceClassification.from_pretrained("rabidpurson/generalChironBERT")
+    return tokenizer, model
 
-health_model = DistilBertForSequenceClassification.from_pretrained(health_model_path)
-general_model = DistilBertForSequenceClassification.from_pretrained(general_model_path)
+
+@lru_cache()
+def get_health_model():
+    tokenizer = DistilBertTokenizer.from_pretrained("rabidpurson/chironBERT")
+    model = DistilBertForSequenceClassification.from_pretrained("rabidpurson/chironBERT")
+    return tokenizer, model
 
 
 def intro_conclusion_tokenize(texts, tokenizer, max_length=512):
@@ -24,23 +29,18 @@ def intro_conclusion_tokenize(texts, tokenizer, max_length=512):
     half_len = max_length // 2
 
     for text in texts:
-        # Tokenize full text without truncation
         tokens = tokenizer(text, truncation=False, padding=False, return_attention_mask=True)
-
         input_ids = tokens['input_ids']
         attention_mask = tokens['attention_mask']
 
-        # Take the first and last halves
         intro_ids = input_ids[:half_len]
         concl_ids = input_ids[-half_len:]
         combined_ids = intro_ids + concl_ids
 
-        # Same for attention mask
         intro_mask = attention_mask[:half_len]
         concl_mask = attention_mask[-half_len:]
         combined_mask = intro_mask + concl_mask
 
-        # Pad if needed
         padding_len = max_length - len(combined_ids)
         if padding_len > 0:
             combined_ids += [tokenizer.pad_token_id] * padding_len
@@ -56,18 +56,10 @@ def intro_conclusion_tokenize(texts, tokenizer, max_length=512):
 
 
 def classify_health_news(text, tokenizer, model, max_length=512):
-    inputs = tokenizer(
-        text,
-        truncation=True,
-        padding=True,
-        max_length=max_length,
-        return_tensors="pt"
-    )
-
+    inputs = tokenizer(text, truncation=True, padding=True, max_length=max_length, return_tensors="pt")
     with torch.no_grad():
         outputs = model(**inputs)
-        logits = outputs.logits
-        predicted_class = torch.argmax(logits, dim=-1).item()
+        predicted_class = torch.argmax(outputs.logits, dim=-1).item()
 
     labels = ["general", "health"]
     return labels[predicted_class]
@@ -80,8 +72,7 @@ def classify_news_authenticity(text, tokenizer, model, max_length=512):
 
     with torch.no_grad():
         outputs = model(input_ids=input_ids, attention_mask=attention_mask)
-        logits = outputs.logits
-        probs = torch.softmax(logits, dim=-1)
+        probs = torch.softmax(outputs.logits, dim=-1)
         predicted_class = torch.argmax(probs, dim=-1).item()
         confidence = probs[0][predicted_class].item()
 
@@ -93,11 +84,12 @@ def classify_news_authenticity(text, tokenizer, model, max_length=512):
 def classify():
     try:
         data = request.get_json()
-
         if not data or 'text' not in data:
             return jsonify({"error": "Missing 'text' field in request"}), 400
 
         text = data['text']
+
+        general_tokenizer, general_model = get_general_model()
         news_type = classify_health_news(text, general_tokenizer, general_model)
 
         response = {
@@ -106,9 +98,10 @@ def classify():
         }
 
         if news_type == "health":
-            authenticity, auth_conf = classify_news_authenticity(text, health_tokenizer, health_model)
+            health_tokenizer, health_model = get_health_model()
+            authenticity, confidence = classify_news_authenticity(text, health_tokenizer, health_model)
             response["authenticity"] = authenticity
-            response["authenticity_confidence"] = round(auth_conf, 4)
+            response["authenticity_confidence"] = round(confidence, 4)
 
         return jsonify(response)
 
