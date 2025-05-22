@@ -48,7 +48,6 @@ async function withBrowser(fn) {
         '--disable-dev-shm-usage',
         '--single-process'
       ],
-      executablePath: '/usr/bin/google-chrome-stable'
     });
     return await fn(browser);
   } finally {
