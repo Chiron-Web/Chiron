@@ -86,8 +86,8 @@ export default function Homepage() {
                 className="bg-white rounded shadow overflow-hidden hover:shadow-md transition-shadow block"
               >
                 <img
-                  src={`https://www.google.com/s2/favicons?domain=${new URL(article.url).hostname}&sz=64`}
-                  alt="Favicon"
+                  src={article.imageUrl || `https://www.google.com/s2/favicons?domain=${new URL(article.url).hostname}&sz=64`}
+                  alt={`Favicon`}
                   className="w-full h-40 object-cover bg-gray-100"
                 />
                 <div className="p-4 text-sm text-gray-800">

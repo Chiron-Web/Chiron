@@ -67,14 +67,16 @@
         "author": ".sc-801dd632-0.eSlECZ .sc-801dd632-7.lasLGY"
       },
       "gmanetwork.com": {
-        "content": ".story_main p",
+        "content": ".upper_article .story_main p",
         "author": ".main-byline",
         "date": ".article-time"
       }
     },
     "fallback": {
       "content": [
+        ".sf-detail-body-wrapper",
         "article p",
+        ".article p",
         ".article-body p",
         ".post-content p",
         ".entry-content p",
@@ -103,7 +105,8 @@
         "time[datetime]",
         ".publish-date",
         ".article-time",
-        "time[data-testid='article-published-date']"
+        "time[data-testid='article-published-date']",
+        ".date span"
       ]
     }
   }
