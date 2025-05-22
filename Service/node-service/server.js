@@ -6,7 +6,6 @@ const router = express.Router();
 const path = require('path');
 const cors = require('cors');
 const app = express();
-const { fetchAndStoreArticles, getPaginatedArticles } = require('./controllers/newsController');
 const port = 8080;
 
 // Middleware
@@ -19,12 +18,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 }).then(() => {
   console.log('Connected to MongoDB');
   app.use('/api/news', require('./routes/newsRoutes'));
-
-  // fetchAndStoreArticles(); // Run once
-  // // Every hour
-  // cron.schedule('0 * * * *', fetchAndStoreArticles);
-
-
 });
 
 
