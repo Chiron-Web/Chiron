@@ -14,6 +14,8 @@ export default function ClassificationForm() {
   const router = useRouter();
 
   const { setClassificationResult, setSubmittedText } = useClassification();
+  const [articleImage, setArticleImage] = useState(null);
+  const [articleCredibilityScore, setArticleCredibilityScore] = useState(null);
 
   // Get URL from query parameters on component mount
   useEffect(() => {
@@ -37,9 +39,16 @@ export default function ClassificationForm() {
 
       if (!response.ok) throw new Error('Failed to classify');
       const data = await response.json();
-      console.log(data);
+      console.log("Classification: ", data);
 
-      setClassificationResult(data);
+      // Include image and credibility in the result
+      const enrichedResult = {
+        ...data,
+        image: articleImage,
+        credibilityScore: articleCredibilityScore,
+      };
+
+      setClassificationResult(enrichedResult);
       setSubmittedText(text);
       router.push('/results');
     } catch (error) {
@@ -64,12 +73,13 @@ export default function ClassificationForm() {
 
       if (!response.ok) throw new Error('Failed to fetch content');
       const data = await response.json();
-    if (data.success && data.content) {
-      setText(data.content);
-      if (data.image) {
-        localStorage.setItem('articleImage', data.image);  // Temporarily store image
-      }
-    } else {
+      console.log("Scraped: ", data)
+
+      if (data.success && data.content) {
+        setText(data.content);
+        if (data.image) setArticleImage(data.image);
+        if (data.credibilityScore) setArticleCredibilityScore(data.credibilityScore);
+      } else {
         alert('Failed to extract content from the URL');
       }
     } catch (error) {

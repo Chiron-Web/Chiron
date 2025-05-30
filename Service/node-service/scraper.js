@@ -14,6 +14,8 @@ app.use(express.json());
 // Load selector config
 const selectorsJSON = JSON.parse(fs.readFileSync(path.join(__dirname, 'article_selectors.json'), 'utf-8'));
 
+const credibilityData = JSON.parse(fs.readFileSync(path.join(__dirname, 'credibility_sources.json'), 'utf-8'));
+
 const selectorsToRemove = [
   '.entry-title', '.em-mod-video', '.anchortext', '.module.ad',
   '.emb-center-well-ad', '.up-show', '.bg-gray-50.border-t.border-b',
@@ -125,11 +127,20 @@ async function scrapeUrl(url) {
 
     if (!result.content) throw new Error(`No content found after evaluating selectors for ${hostname}`);
 
+    let credibilityScore = 'unknown';
+
+    if (credibilityData.authentic[hostname]) {
+      credibilityScore = 'high';
+    } else if (credibilityData.fake[hostname]) {
+      credibilityScore = 'low';
+    }
+
     return {
       success: true,
       url: page.url(),
       ...result,
       image: result.imageUrl || null,
+      credibilityScore,
       error: null
     };
   } catch (error) {

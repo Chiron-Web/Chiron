@@ -1,0 +1,101 @@
+{
+  "authentic": {
+    "webmd.com": {
+      "factual_reporting": "High",
+      "credibility": "High Credibility",
+      "bias_rating": "Pro-Science"
+    },
+    "clinicaladvisor.com": {
+      "factual_reporting": "Not Rated",
+      "credibility": "Trusted Source",
+      "bias_rating": "Not Rated"
+    },
+    "health.harvard.edu": {
+      "factual_reporting": "Not Rated",
+      "credibility": "Trusted Source",
+      "bias_rating": "Not Rated"
+    },
+    "medicalnewstoday.com": {
+      "factual_reporting": "High",
+      "credibility": "High Credibility",
+      "bias_rating": "Pro-Science"
+    },
+    "bbc.com": {
+      "factual_reporting": "High",
+      "credibility": "High Credibility",
+      "bias_rating": "Pro-Science"
+    },
+    "abc.net.au": {
+      "factual_reporting": "High",
+      "credibility": "High Credibility",
+      "bias_rating": "Left-Center"
+    },
+    "cbc.ca": {
+      "factual_reporting": "High",
+      "credibility": "High Credibility",
+      "bias_rating": "Left-Center"
+    },
+    "apnews.com": {
+      "factual_reporting": "High",
+      "credibility": "High Credibility",
+      "bias_rating": "Left-Center"
+    },
+    "rappler.com": {
+      "factual_reporting": "High",
+      "credibility": "High Credibility",
+      "bias_rating": "Left-Center"
+    },
+    "eaglenews.ph": {
+      "factual_reporting": "Not Rated",
+      "credibility": "Not Rated",
+      "bias_rating": "Not Rated"
+    }
+  },
+  "fake": {
+    "foodbabe.com": {
+      "factual_reporting": "Mixed",
+      "credibility": "Low Credibility",
+      "bias_rating": "Pseudoscience"
+    },
+    "food.news": {
+      "factual_reporting": "Very Low",
+      "credibility": "Low Credibility",
+      "bias_rating": "Right Conspiracy-Pseudoscience"
+    },
+    "goop.com": {
+      "factual_reporting": "Low",
+      "credibility": "Low Credibility",
+      "bias_rating": "Pseudoscience"
+    },
+    "infowars.com": {
+      "factual_reporting": "Very Low",
+      "credibility": "Low Credibility",
+      "bias_rating": "Extreme Right"
+    },
+    "naturalnews.com": {
+      "factual_reporting": "Very Low",
+      "credibility": "Low Credibility",
+      "bias_rating": "Far Right Conspiracy-Pseudoscience"
+    },
+    "dailyhealthpost.com": {
+      "factual_reporting": "Low",
+      "credibility": "Low Credibility",
+      "bias_rating": "Conspiracy-Pseudoscience"
+    },
+    "healthimpactnews.com": {
+      "factual_reporting": "Very Low",
+      "credibility": "Low Credibility",
+      "bias_rating": "Right Conspiracy-Pseudoscience"
+    },
+    "consciouslifenews.com": {
+      "factual_reporting": "Mixed",
+      "credibility": "Low Credibility",
+      "bias_rating": "Left Conspiracy-Pseudoscience"
+    },
+    "foodmatters.com": {
+      "factual_reporting": "Low",
+      "credibility": "Low Credibility",
+      "bias_rating": "Pseudoscience"
+    }
+  }
+}

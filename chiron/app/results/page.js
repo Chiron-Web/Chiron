@@ -10,12 +10,7 @@ export default function ResultPage() {
   const { classificationResult, submittedText } = useClassification();
   const router = useRouter();
 
-  const [articleImage, setArticleImage] = useState(null);
 
-    useEffect(() => {
-      setArticleImage(localStorage.getItem('articleImage'));
-      return () => localStorage.removeItem('articleImage'); // Clean up
-    }, []);
 
 
   useEffect(() => {
@@ -26,17 +21,17 @@ export default function ResultPage() {
 
   if (!classificationResult) return null;
 
-  const { news_type, authenticity, authenticity_confidence, error } = classificationResult;
+  const { news_type, authenticity, authenticity_confidence, image, credibilityScore, error } = classificationResult;
 
   const isHealth = news_type?.toLowerCase() === 'health';
   const isFake = isHealth && authenticity?.toLowerCase() === 'fake';
   const isAuthentic = isHealth && authenticity?.toLowerCase() === 'authentic';
 
   const getMessage = () => {
-    if (error) return `⚠️ Error occurred: ${error}`;
-    if (isFake) return '⚠️ This health article may contain misinformation. Verify with trusted sources.';
-    if (isAuthentic) return '✅ This page contains reliable health information.';
-    return 'ℹ️ The article is classified as general news.';
+    if (error) return `Error occurred: ${error}`;
+    if (isFake) return 'This content may contain misinformation/disinformation';
+    if (isAuthentic) return 'This content contains reliable health information';
+    return 'The content is classified as general news';
   };
 
   return (
@@ -44,9 +39,9 @@ export default function ResultPage() {
       <Header />
       <div className="text-center text-gray-700 mt-20 flex items-center justify-center">
         <img
-          src="/logo-black.png"  // Ensure this is a black logo image
+          src="/logo-black.png"  
           alt="CHIRON Logo"
-          className="w-10 h-10 mr-2"  // Ensure the logo is beside the title
+          className="w-10 h-10 mr-2"  
         />
         <h1 className="text-3xl font-bold">CHIRON</h1>
       </div>
@@ -54,35 +49,13 @@ export default function ResultPage() {
 
 
       <main className="flex justify-center px-6 mt-10 mb-10">
-        <div className="border border-gray-300 rounded-xl p-6 bg-white w-full max-w-7xl">
-        <div className="flex flex-wrap items-center gap-2 mb-4">
-          {news_type && (
-            <span className="px-3 py-1 rounded-md bg-green-600 text-white text-sm font-medium">
-              News Type: {news_type}
-            </span>
-          )}
-          {isFake && (
-            <span className="px-3 py-1 rounded-md bg-red-500 text-white text-sm font-medium">
-              Misinformation
-            </span>
-          )}
-          {isAuthentic && (
-            <span className="px-3 py-1 rounded-md bg-green-500 text-white text-sm font-medium">
-              Authentic
-            </span>
-          )}
-          {(isFake || isAuthentic) && authenticity_confidence !== undefined && (
-            <span className="px-3 py-1 rounded-md bg-blue-500 text-white text-sm font-medium">
-              Confidence: {(authenticity_confidence * 100).toFixed(2)}%
-            </span>
-          )}
-        </div>
-          <p className="mb-4 text-gray-700">{getMessage()}</p>
-          <div className="mt-6">
-            <div className="flex gap-4 items-start border rounded bg-gray-50 p-4">
-              <div className="relative w-[600px] h-auto">
+        <div className="border border-sky-950 rounded-xl p-6 w-[70%] max-w-7xl">
+
+          <div className="">
+            <div className="flex gap-4 p-4 flex-col items-center justify-center">
+              <div className="relative w-[350px] h-auto">
                 <img
-                  src={articleImage || (isFake ? '/fake-stamp.png' : isAuthentic ? '/authentic-stamp.png' : '/general.png')}
+                  src={image || (isFake ? '/fake.png' : isAuthentic ? '/authentic.jpg' : '/general.png')}
                   alt="Article Preview"
                   width={300}
                   height={300}
@@ -91,22 +64,54 @@ export default function ResultPage() {
                 
                 {isAuthentic && (
                   <img
-                    src="/authentic_label.png"
+                    src="/authentic-stamp.png"
                     alt="Authentic Label"
-                    className="absolute top-2 right-2 w-24 h-24 opacity-90"
+                    className="absolute top-2 right-2 w-40 h-40 opacity-90"
                   />
                 )}
 
                 {isFake && (
                   <img
-                    src="/fake_label.png"
+                    src="/fake-stamp.png"
                     alt="Fake Label"
-                    className="absolute top-2 right-2 w-24 h-24 opacity-90"
+                    className="absolute top-2 right-2 w-40 h-40 opacity-90"
                   />
                 )}
               </div>
-              <div className="relative max-w-[600px] max-h-[400px] overflow-y-auto">
-                <p className="text-gray-800 whitespace-pre-line">{submittedText}</p>
+              
+              <p className="mb-4 text-sky-950 text-2xl">{getMessage()}</p>
+              <div className='w-full flex items-start'>
+                <div className="flex flex-col items-start gap-1 xl:gap-1 mb-4">
+                  {news_type && (
+                    <span className="py-1 rounded-md text-sky-950 text-l font-medium">
+                      Classification: {news_type}
+                    </span>
+                  )}
+                  {isFake && (
+                    <span className="py-1 rounded-md text-sky-950 text-l font-medium">
+                      Classification: Misinformation/Disinformation
+                    </span>
+                  )}
+                  {isAuthentic && (
+                    <span className="py-1 rounded-md text-sky-950 text-l">
+                      News Type: Authentic
+                    </span>
+                  )}
+                  {(isFake || isAuthentic) && authenticity_confidence !== undefined && (
+                    <span className="py-1 rounded-md text-sky-950 text-l font-medium">
+                      Confidence: <strong>{(authenticity_confidence * 100).toFixed(2)}%</strong>
+                    </span>
+                  )}
+                  {(isFake || isAuthentic) && credibilityScore !== null && (
+                    <span className="py-1 rounded-md text-sky-950 text-l font-medium">
+                      Website Credibility Score: <strong>{credibilityScore}</strong>
+                    </span>
+                  )}
+                </div>
+              </div>
+              
+              <div className="relative max-w-full max-h-[400px] overflow-y-auto">
+                <p className="text-gray-950 whitespace-pre-line text-sm">{submittedText}</p>
               </div>
             </div>
           </div>
