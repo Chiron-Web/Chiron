@@ -82,10 +82,10 @@ export default function ResultPage() {
             <div className="flex gap-4 items-start border rounded bg-gray-50 p-4">
               <div className="relative w-[600px] h-auto">
                 <img
-                  src={articleImage || (isFake ? '/fake.png' : isAuthentic ? '/authentic.png' : '/general.png')}
+                  src={articleImage || (isFake ? '/fake-stamp.png' : isAuthentic ? '/authentic-stamp.png' : '/general.png')}
                   alt="Article Preview"
-                  width={600}
-                  height={400}
+                  width={300}
+                  height={300}
                   className="object-cover rounded-md w-full"
                 />
                 
