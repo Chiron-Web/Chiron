@@ -42,13 +42,7 @@ async function withBrowser(fn) {
   try {
     browser = await puppeteer.launch({ 
       headless: true,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--single-process'
-      ],
-      executablePath: '/usr/bin/google-chrome-stable'
+      args: ['--no-sandbox', '--disable-setuid-sandbox'] // For Docker/CI environments
     });
     return await fn(browser);
   } finally {
@@ -166,10 +160,8 @@ async function scrapeUrl(url, browser) {
       url: finalUrl,
       success: true,
       ...result,
-      image: result.image || null,
       error: null
     };
-
   } catch (error) {
     return {
       success: false,
@@ -206,5 +198,5 @@ app.post('/scrape', async (req, res) => {
 
 // Start server
 app.listen(port, () => {
-  console.log(`Scraping API server running on ${port}`);
+  console.log(`Scraping API server running on http://localhost:${port}`);
 });

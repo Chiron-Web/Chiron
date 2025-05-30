@@ -29,7 +29,7 @@ export default function ClassificationForm() {
     setLoading(true);
 
     try {
-      const response = await fetch('https://chiron-gs9u.onrender.com/classify', {
+      const response = await fetch('http://127.0.0.1:5000/classify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, url }),
@@ -56,7 +56,7 @@ export default function ClassificationForm() {
     setScraping(true);
 
     try {
-      const response = await fetch('https://chiron-gs9u.onrender.com/scrape', {
+      const response = await fetch('http://localhost:4000/scrape', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url }),

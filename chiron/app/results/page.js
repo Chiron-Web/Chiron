@@ -63,7 +63,7 @@ export default function ResultPage() {
           )}
           {isFake && (
             <span className="px-3 py-1 rounded-md bg-red-500 text-white text-sm font-medium">
-              Fake News!
+              Misinformation
             </span>
           )}
           {isAuthentic && (
