@@ -44,7 +44,7 @@ export default function ResultPage() {
       <Header />
       <div className="text-center text-gray-700 mt-20 flex items-center justify-center">
         <img
-          src="/logo-black.png"  // Ensure this is a black logo image
+          src="/CHIRON-logo-darkblue.png"  // Ensure this is a black logo image
           alt="CHIRON Logo"
           className="w-10 h-10 mr-2"  // Ensure the logo is beside the title
         />
@@ -53,8 +53,8 @@ export default function ResultPage() {
       <p className="text-sm text-center mt-2 text-gray-700">Leveraging technology for public health education.</p>
 
 
-      <main className="flex justify-center px-6 mt-10 mb-10">
-        <div className="border border-gray-300 rounded-xl p-6 bg-white w-full max-w-7xl">
+      <main className="flex justify-center px-6 mt-4 mb-4">
+        <div className="border border-gray-300 rounded-xl p-6 bg-white w-full max-w-4xl">
         <div className="flex flex-wrap items-center gap-2 mb-4">
           {news_type && (
             <span className="px-3 py-1 rounded-md bg-green-600 text-white text-sm font-medium">
@@ -79,39 +79,52 @@ export default function ResultPage() {
         </div>
           <p className="mb-4 text-gray-700">{getMessage()}</p>
           <div className="mt-6">
-            <div className="flex gap-4 items-start border rounded bg-gray-50 p-4">
-              <div className="relative w-[600px] h-auto">
+          <div className="flex justify-center">
+            <div className="relative w-[200px] h-auto">
+              <img
+                src={articleImage || (isFake ? '/fake-stamp.png' : isAuthentic ? '/authentic-stamp.png' : '/CHIRON-logo-darkblue.png')}
+                alt="Article Preview"
+                width={120}
+                height={120}
+                className="object-cover rounded-md w-full"
+              />
+              
+              {isAuthentic && (
                 <img
-                  src={articleImage || (isFake ? '/fake.png' : isAuthentic ? '/authentic.png' : '/general.png')}
-                  alt="Article Preview"
-                  width={600}
-                  height={400}
-                  className="object-cover rounded-md w-full"
+                  src="/authentic-stamp.png"
+                  alt="Authentic Label"
+                  className="absolute top-2 right-2 w-24 h-24 opacity-90"
                 />
-                
-                {isAuthentic && (
-                  <img
-                    src="/authentic_label.png"
-                    alt="Authentic Label"
-                    className="absolute top-2 right-2 w-24 h-24 opacity-90"
-                  />
-                )}
+              )}
 
-                {isFake && (
-                  <img
-                    src="/fake_label.png"
-                    alt="Fake Label"
-                    className="absolute top-2 right-2 w-24 h-24 opacity-90"
-                  />
-                )}
-              </div>
-              <div className="relative max-w-[600px] max-h-[400px] overflow-y-auto">
+              {isFake && (
+                <img
+                  src="/fake-stamp.png"
+                  alt="Fake Label"
+                  className="absolute top-2 right-2 w-24 h-24 opacity-90"
+                />
+              )}
+            </div>
+          </div>
+            <div className="flex justify-center w-full">
+              <div className="relative w-full max-h-[240px] overflow-y-auto mx-auto border border-white-200 rounded-md p-4 bg-white-50">
                 <p className="text-gray-800 whitespace-pre-line">{submittedText}</p>
               </div>
             </div>
           </div>
         </div>
       </main>
+
+      <div className="flex justify-center mt-2 mb-8">
+        <div className="w-full max-w-4xl">
+          <button
+            onClick={() => router.push('/')}
+            className="w-full px-6 py-2 bg-blue-700 text-white rounded-lg font-semibold hover:bg-green-900 transition"
+          >
+            Verify Another Article
+          </button>
+        </div>
+      </div>
 
       <Footer />
     </div>
