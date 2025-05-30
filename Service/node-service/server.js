@@ -6,7 +6,7 @@ const router = express.Router();
 const path = require('path');
 const cors = require('cors');
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 4000;
 
 // Middleware
 app.use(cors());
@@ -16,7 +16,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
 }).then(() => {
   console.log('Connected to MongoDB');
-  app.use('/api/news', require('./routes/newsRoutes'));
+  app.use('/news', require('./routes/newsRoutes'));
 });
 
 
