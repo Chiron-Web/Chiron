@@ -21,7 +21,7 @@ export default function ResultPage() {
 
   if (!classificationResult) return null;
 
-  const { news_type, authenticity, authenticity_confidence, image, credibilityScore, error } = classificationResult;
+  const { news_type, authenticity, authenticity_confidence, image, credibilityScore, articleTitle, error } = classificationResult;
 
   const isHealth = news_type?.toLowerCase() === 'health';
   const isFake = isHealth && authenticity?.toLowerCase() === 'fake';
@@ -31,7 +31,7 @@ export default function ResultPage() {
     if (error) return `Error occurred: ${error}`;
     if (isFake) return 'This content may contain misinformation/disinformation';
     if (isAuthentic) return 'This content contains reliable health information';
-    return 'The content is classified as general news';
+    return 'BEWARE: This content is not a health article';
   };
 
   return (
@@ -84,17 +84,17 @@ export default function ResultPage() {
                 <div className="flex flex-col items-start gap-1 xl:gap-1 mb-4">
                   {news_type && (
                     <span className="py-1 rounded-md text-sky-950 text-l font-medium">
-                      Classification: {news_type}
+                      Classification: {news_type.toUpperCase()}
                     </span>
                   )}
                   {isFake && (
                     <span className="py-1 rounded-md text-sky-950 text-l font-medium">
-                      Classification: Misinformation/Disinformation
+                      Classification: FAKE
                     </span>
                   )}
                   {isAuthentic && (
                     <span className="py-1 rounded-md text-sky-950 text-l">
-                      News Type: Authentic
+                      News Type: AUTHENTIC
                     </span>
                   )}
                   {(isFake || isAuthentic) && authenticity_confidence !== undefined && (
@@ -102,9 +102,14 @@ export default function ResultPage() {
                       Confidence: <strong>{(authenticity_confidence * 100).toFixed(2)}%</strong>
                     </span>
                   )}
-                  {(isFake || isAuthentic) && credibilityScore !== null && (
+                  {credibilityScore !== null && (
                     <span className="py-1 rounded-md text-sky-950 text-l font-medium">
-                      Website Credibility Score: <strong>{credibilityScore}</strong>
+                      Website Credibility Score: {credibilityScore.toUpperCase()}
+                    </span>
+                  )}
+                  {articleTitle !== null && (
+                    <span className="py-1 rounded-md text-sky-950 text-l font-medium">
+                      Website Credibility Score: <strong>{articleTitle}</strong>
                     </span>
                   )}
                 </div>

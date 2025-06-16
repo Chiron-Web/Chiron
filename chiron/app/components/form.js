@@ -16,6 +16,7 @@ export default function ClassificationForm() {
   const { setClassificationResult, setSubmittedText } = useClassification();
   const [articleImage, setArticleImage] = useState(null);
   const [articleCredibilityScore, setArticleCredibilityScore] = useState(null);
+  const [articleTitle, setArticleTitle] = useState(null);
 
   // Get URL from query parameters on component mount
   useEffect(() => {
@@ -46,6 +47,7 @@ export default function ClassificationForm() {
         ...data,
         image: articleImage,
         credibilityScore: articleCredibilityScore,
+        articleTitle: articleTitle,
       };
 
       setClassificationResult(enrichedResult);
@@ -79,6 +81,7 @@ export default function ClassificationForm() {
         setText(data.content);
         if (data.image) setArticleImage(data.image);
         if (data.credibilityScore) setArticleCredibilityScore(data.credibilityScore);
+        if (data.title) setArticleTitle(data.title);
       } else {
         alert('Failed to extract content from the URL');
       }
