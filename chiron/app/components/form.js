@@ -14,6 +14,9 @@ export default function ClassificationForm() {
   const router = useRouter();
 
   const { setClassificationResult, setSubmittedText } = useClassification();
+  const [articleImage, setArticleImage] = useState(null);
+  const [articleCredibilityScore, setArticleCredibilityScore] = useState(null);
+  const [articleTitle, setArticleTitle] = useState(null);
 
   // Get URL from query parameters on component mount
   useEffect(() => {
@@ -29,7 +32,7 @@ export default function ClassificationForm() {
     setLoading(true);
 
     try {
-      const response = await fetch('https://chiron-verify.onrender.com/classify', {
+      const response = await fetch('http://127.0.0.1:5000/classify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, url }),
@@ -37,9 +40,17 @@ export default function ClassificationForm() {
 
       if (!response.ok) throw new Error('Failed to classify');
       const data = await response.json();
-      console.log(data);
+      console.log("Classification: ", data);
 
-      setClassificationResult(data);
+      // Include image and credibility in the result
+      const enrichedResult = {
+        ...data,
+        image: articleImage,
+        credibilityScore: articleCredibilityScore,
+        articleTitle: articleTitle,
+      };
+
+      setClassificationResult(enrichedResult);
       setSubmittedText(text);
       router.push('/results');
     } catch (error) {
@@ -56,7 +67,7 @@ export default function ClassificationForm() {
     setScraping(true);
 
     try {
-      const response = await fetch('https://chiron-o2c5.onrender.com/scrape', {
+      const response = await fetch('http://localhost:4000/scrape', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url }),
@@ -64,12 +75,14 @@ export default function ClassificationForm() {
 
       if (!response.ok) throw new Error('Failed to fetch content');
       const data = await response.json();
-    if (data.success && data.content) {
-      setText(data.content);
-      if (data.image) {
-        localStorage.setItem('articleImage', data.image);  // Temporarily store image
-      }
-    } else {
+      console.log("Scraped: ", data)
+
+      if (data.success && data.content) {
+        setText(data.content);
+        if (data.image) setArticleImage(data.image);
+        if (data.credibilityScore) setArticleCredibilityScore(data.credibilityScore);
+        if (data.title) setArticleTitle(data.title);
+      } else {
         alert('Failed to extract content from the URL');
       }
     } catch (error) {

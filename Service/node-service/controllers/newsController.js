@@ -5,7 +5,7 @@ const puppeteer = require('puppeteer');
 // Call your classifier API
 const classify = async (text) => {
     try {
-      const res = await fetch('https://chiron-verify.onrender.com/classify', {
+      const res = await fetch('http://localhost:5000/classify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text })
@@ -30,7 +30,7 @@ async function fetchAndStoreArticles() {
   
       let scraped;
       try {
-        const res = await fetch('https://chiron-o2c5.onrender.com/scrape', {
+        const res = await fetch('http://localhost:4000/scrape', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: article.link })

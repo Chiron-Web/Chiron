@@ -2,7 +2,7 @@ const { fetch } = require('undici');
 const { XMLParser } = require('fast-xml-parser');
 
 async function fetchGoogleHealthNewsRSS() {
-  const FEED_URL = 'https://news.google.com/rss/search?q=health&hl=en-PH&gl=PH&ceid=PH:en';
+  const FEED_URL = 'https://news.google.com/rss/search?q="health+news"&hl=en-PH&gl=PH&ceid=PH:en';
   const res = await fetch(FEED_URL);
   const xml = await res.text();
   const parser = new XMLParser();
