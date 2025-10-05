@@ -22,6 +22,9 @@ import { ClassificationProvider } from './components/context';
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="./icon.png" />
+      </head>
       <body>
         <ClassificationProvider>{children}</ClassificationProvider>
       </body>
