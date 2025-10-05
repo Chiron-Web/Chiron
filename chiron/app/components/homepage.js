@@ -45,18 +45,21 @@ export default function Homepage() {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 to-white">
       <Header />
-      <div className='w-full flex flex-col py-20'>
-        <div className="text-center text-gray-700 mt-20 flex items-center justify-center">
-          <img
-            src="/logo-black.png"
-            alt="CHIRON Logo"
-            className="w-10 h-10 mr-2"
-          />
-          <h1 className="text-3xl font-bold">CHIRON</h1>
+      <div className='landing-body h-screen w-full flex flex-grow flex-col py-20'>
+        <div className='w-full items-center justify-center'>
+          <div className="text-center text-gray-700 mt-20 flex items-center justify-center">
+            <img
+              src="/logo-black.png"
+              alt="CHIRON Logo"
+              className="w-10 h-10 mr-2"
+            />
+            <h1 className="text-3xl font-bold">CHIRON</h1>
+          </div>
+          <p className="text-sm text-center mt-2 text-gray-700">
+            Leveraging technology for public health education.
+          </p>
         </div>
-        <p className="text-sm text-center mt-2 text-gray-700">
-          Leveraging technology for public health education.
-        </p>
+        
 
         <div className="flex-grow flex items-center justify-center px-4">
           <div className="w-full max-w-6xl">
