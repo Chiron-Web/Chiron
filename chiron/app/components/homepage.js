@@ -14,7 +14,12 @@ export default function Homepage() {
   const observerRef = useRef(null);
   const router = useRouter();
   const dispatch = useDispatch();
-  dispatch(fetchArticles(PAGE_SIZE, FETCH_ARTICLE_URL));
+  const page = useSelector(state => state.articles.page);
+  console.log(`articles has page ${page}`)
+
+  useEffect(() => {
+    dispatch(fetchArticles(PAGE_SIZE, FETCH_ARTICLE_URL, page));
+  }, [dispatch]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
