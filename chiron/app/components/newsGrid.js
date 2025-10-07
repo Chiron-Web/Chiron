@@ -20,7 +20,8 @@ export default function NewsGrid({
 
       if (data.success && data.articles.length > 0) {
         setArticles(prev => [...prev, ...data.articles]);
-        setHasMore(data.articles.length === pageSize);
+        setHasMore(data.articles.length === pageSize); 
+        // basically there are no more articles if pageSize [typically 10] articles are not returned
       } else {
         setHasMore(false);
       }
