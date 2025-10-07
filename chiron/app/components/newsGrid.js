@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function NewsGrid({ 
   initialArticles = [],
@@ -6,30 +7,33 @@ export default function NewsGrid({
   pageSize = 9,
   showStatusBadge = true
 }) {
-  const [articles, setArticles] = useState(initialArticles);
+  // const [articles, setArticles] = useState(initialArticles);
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  // const [hasMore, setHasMore] = useState(true);
   const [expandedArticles, setExpandedArticles] = useState({});
+  const dispatch = useDispatch();
+  const { isArticleLoading, articles, hasMore } = useSelector(state => state.articles);
+  if (articles.length > 0) {setIsLoading(false)}
 
-  const fetchArticles = async (pageNum) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`${fetchUrl}?page=${pageNum}&pageSize=${pageSize}`);
-      const data = await response.json();
+  // const fetchArticles = async (pageNum) => {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await fetch(`${fetchUrl}?page=${pageNum}&pageSize=${pageSize}`);
+  //     const data = await response.json();
 
-      if (data.success && data.articles.length > 0) {
-        setArticles(prev => [...prev, ...data.articles]);
-        setHasMore(data.articles.length === pageSize); 
-        // basically there are no more articles if pageSize [typically 10] articles are not returned
-      } else {
-        setHasMore(false);
-      }
-    } catch (err) {
-      console.error('Error fetching articles:', err);
-    }
-    setIsLoading(false);
-  };
+  //     if (data.success && data.articles.length > 0) {
+  //       setArticles(prev => [...prev, ...data.articles]);
+  //       setHasMore(data.articles.length === pageSize); 
+  //       // basically there are no more articles if pageSize [typically 10] articles are not returned
+  //     } else {
+  //       setHasMore(false);
+  //     }
+  //   } catch (err) {
+  //     console.error('Error fetching articles:', err);
+  //   }
+  //   setIsLoading(false);
+  // };
 
   useEffect(() => {
     if (initialArticles.length === 0) {
@@ -56,7 +60,7 @@ export default function NewsGrid({
         <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
     );
-    }
+  }
 
 
   return (
