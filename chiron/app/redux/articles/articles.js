@@ -10,11 +10,14 @@ const articlesSlice = createSlice({
   initialState: initialArticlesState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchArticles.fulfilled, (state, action) => {});
+    builder.addCase(fetchArticles.fulfilled, (state, action) => {
+      state.articles.push(...action.payload.articles);
+      state.hasMore = action.payload.hasMore;
+    });
   }
 });
 
-export const fetchArticles = (pageNum, fetchUrl) = createAsyncThunk(
+export const fetchArticles = createAsyncThunk(
     'articles/fetchArticles',
     async ( pageNum, fetchUrl ) => {
         try {
@@ -22,13 +25,14 @@ export const fetchArticles = (pageNum, fetchUrl) = createAsyncThunk(
           const data = await response.json();
 
           if (data.success && data.articles.length > 0) {
-              articles.push(...data.articles);
-              hasMore = data.articles.length === pageSize;
-          } else {
-              hasMore = false;
-          }
+            return {
+              articles: data.articles,
+              hasMore: data.articles.length === pageSize
+            }  
+          } 
+          return { articles: [], hasMore: false };
         } catch (err) {
-        console.error('Error fetching articles:', err);
+          console.error('Error fetching articles:', err);
         }
     }
 );
