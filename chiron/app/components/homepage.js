@@ -3,12 +3,18 @@ import Header from './header';
 import Footer from './footer';
 import { useRouter } from 'next/navigation';
 import NewsGrid from './newsGrid';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchArticles } from '../redux/articles/articles';
 
 export default function Homepage() {
+  const FETCH_ARTICLE_URL = 'https://chiron-news.onrender.com/news/articles';
+  const PAGE_SIZE = 9;
   const [url, setUrl] = useState('');
   const [showNews, setShowNews] = useState(false);
   const observerRef = useRef(null);
   const router = useRouter();
+  const dispatch = useDispatch();
+  dispatch(fetchArticles(PAGE_SIZE, FETCH_ARTICLE_URL));
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
