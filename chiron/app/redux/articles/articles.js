@@ -20,10 +20,14 @@ const articlesSlice = createSlice({
     },
     setIsArticleLoading: (state, action) => {
       state.isArticleLoading = action.payload;
+    },
+    incrementPage: (state) => {
+      state.page += 1;
     }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchArticles.fulfilled, (state, action) => {
+
       addArticles(state, action.payload.articles);
       setHasMore(state, action.payload.hasMore);
       setIsArticleLoading(state, action.payload.isArticleLoading);
@@ -33,8 +37,10 @@ const articlesSlice = createSlice({
 
 export const fetchArticles = createAsyncThunk(
     'articles/fetchArticles',
-    async ( pageNum, fetchUrl, pageSize ) => {
+    async ({ pageNum, fetchUrl, pageSize }) => {
+      
         try {
+          console.log(`Inside thunk: Fetching articles for page ${pageNum}: ${fetchUrl}?page=${pageNum}&pageSize=${pageSize}`);
           const response = await fetch(`${fetchUrl}?page=${pageNum}&pageSize=${pageSize}`);
           const data = await response.json();
 
