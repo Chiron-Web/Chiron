@@ -2,19 +2,21 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function NewsGrid({ 
-  initialArticles = [],
-  fetchUrl = 'https://chiron-news.onrender.com/news/articles',
-  pageSize = 9,
+  articles = [],
   showStatusBadge = true
 }) {
-  // const [articles, setArticles] = useState(initialArticles);
+  // const [articles, setArticles] = useState(articles);
+  console.log(`NewsGrid received ${articles.length} initial articles.`);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  // const [hasMore, setHasMore] = useState(true);
-  const [expandedArticles, setExpandedArticles] = useState({});
-  const dispatch = useDispatch();
-  const { isArticleLoading, articles, hasMore } = useSelector(state => state.articles);
-  if (articles.length > 0) {setIsLoading(false)}
+  const [hasMore, setHasMore] = useState(true);
+
+
+  useEffect(() => {
+    if (articles.length > 0) {
+      setIsLoading(false);
+    }
+  }, [articles]);
 
   // const fetchArticles = async (pageNum) => {
   //   setIsLoading(true);
@@ -36,8 +38,8 @@ export default function NewsGrid({
   // };
 
   useEffect(() => {
-    if (initialArticles.length === 0) {
-      fetchArticles(page);
+    if (articles.length === 0) {
+      // fetchArticles(page);
     }
   }, []);
 
@@ -48,10 +50,10 @@ export default function NewsGrid({
   };
 
   const toggleExpand = (id) => {
-    setExpandedArticles(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
+    // setExpandedArticles(prev => ({
+    //   ...prev,
+    //   [id]: !prev[id]
+    // }));
   };
 
   function LoadingCD() {
@@ -119,9 +121,9 @@ export default function NewsGrid({
                             })()}
                         </p>
 
-                        <p className={`${expandedArticles[article._id] ? '' : 'line-clamp-3'} mb-2`}>
+                        {/* <p className={`${expandedArticles[article._id] ? '' : 'line-clamp-3'} mb-2`}>
                             {article.content}
-                        </p>
+                        </p> */}
                         
                         
                         </div>
