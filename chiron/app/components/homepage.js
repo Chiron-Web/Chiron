@@ -3,12 +3,30 @@ import Header from './header';
 import Footer from './footer';
 import { useRouter } from 'next/navigation';
 import NewsGrid from './newsGrid';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchArticles } from '../redux/articles/articles';
 
 export default function Homepage() {
+  const FETCH_ARTICLE_URL = 'https://chiron-news.onrender.com/news/articles';
+  const [storedArticles, setStoredArticles] = useState([]);
+  const PAGE_SIZE = 9;
   const [url, setUrl] = useState('');
   const [showNews, setShowNews] = useState(false);
   const observerRef = useRef(null);
   const router = useRouter();
+  const dispatch = useDispatch();
+    const { page, articles, hasMore, isArticleLoading } = useSelector(
+    state => state.articles
+  );
+  console.log(`articles has page ${page}`);
+  console.log(`Fetching articles for page ${PAGE_SIZE}: ${FETCH_ARTICLE_URL}?page=${PAGE_SIZE}&pageSize=${page}`);
+
+  useEffect(() => {
+    // fetch page 1 on mount
+    dispatch(fetchArticles({ pageNum: 1, fetchUrl: FETCH_ARTICLE_URL, pageSize: PAGE_SIZE }));
+    console.log("articles fetched on mount", articles.length);
+  }, [dispatch]);
+
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -89,7 +107,14 @@ export default function Homepage() {
         <hr className='text-sky-950 w-[90%] items-center justify-center'></hr>
       </div>
       
-      {showNews && <NewsGrid />}
+      {showNews && <NewsGrid
+          articles={articles}
+          hasMore={hasMore}
+          isLoading={isArticleLoading}
+          fetchUrl={FETCH_ARTICLE_URL}
+          pageSize={PAGE_SIZE}
+          page={page}
+        />}
 
       <Footer />
     </div>
