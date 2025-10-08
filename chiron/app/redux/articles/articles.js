@@ -27,10 +27,10 @@ const articlesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchArticles.fulfilled, (state, action) => {
-
-      addArticles(state, action.payload.articles);
-      setHasMore(state, action.payload.hasMore);
-      setIsArticleLoading(state, action.payload.isArticleLoading);
+      state.articles.push(...action.payload.articles);
+      state.hasMore = action.payload.hasMore;
+      state.isArticleLoading = action.payload.isArticleLoading;
+      console.log(`In extraReducers, fetched ${action.payload.articles.length} articles. Total now: ${state.articles.length}`);
     });
   }
 });
