@@ -3,39 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export default function NewsGrid({ 
   articles = [],
-  showStatusBadge = true
+  showStatusBadge = true,
+  handleLoadMore,
+  isLoading,
+  hasMore
 }) {
-  // const [articles, setArticles] = useState(articles);
   console.log(`NewsGrid received ${articles.length} initial articles.`);
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
-
-
-  useEffect(() => {
-    if (articles.length > 0) {
-      setIsLoading(false);
-    }
-  }, [articles]);
-
-
-  useEffect(() => {
-    if (articles.length === 0) {
-    }
-  }, []);
-
-  const handleLoadMore = () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    fetchArticles(nextPage);
-  };
-
-  const toggleExpand = (id) => {
-    // setExpandedArticles(prev => ({
-    //   ...prev,
-    //   [id]: !prev[id]
-    // }));
-  };
 
   function LoadingCD() {
     return (
