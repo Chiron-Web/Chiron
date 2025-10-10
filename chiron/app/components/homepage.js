@@ -4,7 +4,13 @@ import Footer from './footer';
 import { useRouter } from 'next/navigation';
 import NewsGrid from './newsGrid';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchArticles } from '../redux/articles/articles';
+import { fetchArticles, setIsArticleLoading, incrementPage } from '../redux/articles/articles';
+
+const delay = (timeoutTime) => {
+  setTimeout(() => {
+
+  }, timeoutTime);
+}
 
 export default function Homepage() {
   const FETCH_ARTICLE_URL = 'https://chiron-news.onrender.com/news/articles';
@@ -15,7 +21,7 @@ export default function Homepage() {
   const observerRef = useRef(null);
   const router = useRouter();
   const dispatch = useDispatch();
-    const { page, articles, hasMore, isArticleLoading } = useSelector(
+  const { page, articles, hasMore, isArticleLoading } = useSelector(
     state => state.articles
   );
   console.log(`articles has page ${page}`);
@@ -23,9 +29,9 @@ export default function Homepage() {
 
   useEffect(() => {
     // fetch page 1 on mount
-    dispatch(fetchArticles({ pageNum: 1, fetchUrl: FETCH_ARTICLE_URL, pageSize: PAGE_SIZE }));
+    dispatch(fetchArticles({ pageNum: page, fetchUrl: FETCH_ARTICLE_URL, pageSize: PAGE_SIZE }));
     console.log("articles fetched on mount", articles.length);
-  }, [dispatch]);
+  }, [dispatch, page]);
 
 
   const handleSearchSubmit = (e) => {
@@ -59,6 +65,13 @@ export default function Homepage() {
       }
     };
   }, []);
+
+  const handleLoadMore = async () => {
+    dispatch(setIsArticleLoading(true));
+    dispatch(incrementPage());
+    delay(5000)
+    dispatch(setIsArticleLoading(false));
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 to-white">
@@ -114,6 +127,7 @@ export default function Homepage() {
           fetchUrl={FETCH_ARTICLE_URL}
           pageSize={PAGE_SIZE}
           page={page}
+          handleLoadMore={handleLoadMore}
         />}
 
       <Footer />
