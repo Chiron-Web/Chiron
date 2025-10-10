@@ -3,63 +3,17 @@ import { useDispatch, useSelector } from 'react-redux';
 
 export default function NewsGrid({ 
   articles = [],
-  showStatusBadge = true
+  showStatusBadge = true,
+  handleLoadMore,
+  isLoading,
+  hasMore
 }) {
-  // const [articles, setArticles] = useState(articles);
   console.log(`NewsGrid received ${articles.length} initial articles.`);
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
-
-
-  useEffect(() => {
-    if (articles.length > 0) {
-      setIsLoading(false);
-    }
-  }, [articles]);
-
-  // const fetchArticles = async (pageNum) => {
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await fetch(`${fetchUrl}?page=${pageNum}&pageSize=${pageSize}`);
-  //     const data = await response.json();
-
-  //     if (data.success && data.articles.length > 0) {
-  //       setArticles(prev => [...prev, ...data.articles]);
-  //       setHasMore(data.articles.length === pageSize); 
-  //       // basically there are no more articles if pageSize [typically 10] articles are not returned
-  //     } else {
-  //       setHasMore(false);
-  //     }
-  //   } catch (err) {
-  //     console.error('Error fetching articles:', err);
-  //   }
-  //   setIsLoading(false);
-  // };
-
-  useEffect(() => {
-    if (articles.length === 0) {
-      // fetchArticles(page);
-    }
-  }, []);
-
-  const handleLoadMore = () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    fetchArticles(nextPage);
-  };
-
-  const toggleExpand = (id) => {
-    // setExpandedArticles(prev => ({
-    //   ...prev,
-    //   [id]: !prev[id]
-    // }));
-  };
 
   function LoadingCD() {
     return (
         <div className="flex items-center justify-center mt-10 mb-10">
-        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
     );
   }
@@ -121,9 +75,8 @@ export default function NewsGrid({
                             })()}
                         </p>
 
-                        {/* <p className={`${expandedArticles[article._id] ? '' : 'line-clamp-3'} mb-2`}>
-                            {article.content}
-                        </p> */}
+                        {/* 
+                         */}
                         
                         
                         </div>
