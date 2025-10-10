@@ -58,5 +58,10 @@ export const fetchArticles = createAsyncThunk(
     }
 );
 
+// export action creators
+export const { setHasMore, setIsArticleLoading, incrementPage, addArticles } = articlesSlice.actions;
+
+// export thunk
+export { fetchArticles };
 
 export const articlesReducer = articlesSlice.reducer;
