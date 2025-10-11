@@ -22,79 +22,87 @@ export default function NewsGrid({
 
   return (
     <>
-        {isLoading ? (
-                <LoadingCD />
-            ) : (
-            
+        
             <div className="flex items-center justify-center px-18 flex-col">
                 
-                <div className='flex flex-left w-full mb-10 mt-5'> 
-                    <h4 className="text-2xl font-bold text-sky-950">LATEST HEALTH NEWS</h4>
-                </div>
+                {(!isLoading && (articles.length > 0)) ? (
+                    <div className='flex flex-left w-full mb-10 mt-5'> 
+                        <h4 className="text-2xl font-bold text-sky-100">LATEST HEALTH NEWS</h4>
+                    </div>
+                ) : (
+                    <div className='flex items-cente justify-center w-full mb-10 mt-5'> 
+                        <h6 className="text-l font-bold text-sky-950 opacity-50">There are no verified news to show</h6>
+                    </div>
+                )}
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
-                    {articles.map((article, i) => (
-                    <div
-                        key={article._id || i}
-                        className="bg-white rounded shadow overflow-hidden hover:shadow-md transition-shadow flex flex-col"
-                    >
-                        <a 
-                        href={article.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="block"
+                    {(articles.length != 0) && articles.map((article, i) => (
+                        <div
+                            key={article._id || i}
+                            className="bg-white rounded shadow overflow-hidden hover:shadow-md transition-shadow flex flex-col"
                         >
-                        <img
-                            src={article.imageUrl || `https://www.google.com/s2/favicons?domain=${new URL(article.url).hostname}&sz=64`}
-                            alt={`Favicon`}
-                            className={article.imageUrl ? "w-full h-40 object-cover bg-gray-100" : "w-full h-40 object-contain bg-gray-100 items-center justify-center"}
-                        />
-                        </a>
-                        
-                        <div className="p-4 text-sm text-gray-800 flex-grow flex flex-col">
-                        <div className="flex justify-between items-start mb-1">
                             <a 
                             href={article.url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="font-semibold text-base line-clamp-2 hover:text-blue-600"
+                            className="block"
                             >
-                            {article.title}
+                            <img
+                                src={article.imageUrl || `https://www.google.com/s2/favicons?domain=${new URL(article.url).hostname}&sz=64`}
+                                alt={`Favicon`}
+                                className={article.imageUrl ? "w-full h-40 object-cover bg-gray-100" : "w-full h-40 object-contain bg-gray-100 items-center justify-center"}
+                            />
                             </a>
-                            {showStatusBadge && article.classification?.status === 'success' && (
-                            <span className="text-green-600 text-xs border border-green-600 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">
-                                Verified
-                            </span>
+                            
+                            <div className="p-4 text-sm text-gray-800 flex-grow flex flex-col">
+                            <div className="flex justify-between items-start mb-1">
+                                <a 
+                                href={article.url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="font-semibold text-base line-clamp-2 hover:text-blue-600"
+                                >
+                                {article.title}
+                                </a>
+                                {showStatusBadge && article.classification?.status === 'success' && (
+                                <span className="text-green-600 text-xs border border-green-600 px-2 py-0.5 rounded-full ml-2 flex-shrink-0">
+                                    Verified
+                                </span>
+                                )}
+                            </div>
+                            
+                            <p className="text-gray-600 text-xs mb-2">
+                                {(() => {
+                                const parsedDate = new Date(article.date);
+                                return isNaN(parsedDate)
+                                    ? String(article.date)
+                                    : parsedDate.toLocaleDateString();
+                                })()}
+                            </p>
+
+                            {/* 
+                            */}
+                            
+                            
+                            </div>
+                            {article.content && article.content.split(' ').length > 30 && (
+                                <button 
+                                onClick={() => toggleExpand(article._id || i)}
+                                className="text-blue-500 text-xs mt-auto self-start hover:underline"
+                                >
+                                {/* {expandedArticles[article._id] ? 'Show less' : 'Read more'} */}
+                                </button>
                             )}
                         </div>
                         
-                        <p className="text-gray-600 text-xs mb-2">
-                            {(() => {
-                            const parsedDate = new Date(article.date);
-                            return isNaN(parsedDate)
-                                ? String(article.date)
-                                : parsedDate.toLocaleDateString();
-                            })()}
-                        </p>
-
-                        {/* 
-                         */}
-                        
-                        
-                        </div>
-                        {article.content && article.content.split(' ').length > 30 && (
-                            <button 
-                            onClick={() => toggleExpand(article._id || i)}
-                            className="text-blue-500 text-xs mt-auto self-start hover:underline"
-                            >
-                            {/* {expandedArticles[article._id] ? 'Show less' : 'Read more'} */}
-                            </button>
-                        )}
-                    </div>
                     ))}
                 </div>
+                {isLoading && (
+                    <LoadingCD />
+                )}
+            
 
-                {hasMore && (
+                {!isLoading && hasMore && (
                     <div className="flex justify-center mt-6 mb-10">
                     <button
                         onClick={handleLoadMore}
@@ -106,7 +114,7 @@ export default function NewsGrid({
                     </div>
                 )}
             </div>
-            )}
+       
     </>
   );
 }
