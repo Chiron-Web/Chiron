@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Loader from "./loader";
 
 export default function NewsGrid({ 
   articles = [],
@@ -21,14 +22,12 @@ export default function NewsGrid({
 
   return (
     <>
-        {isLoading ? (
-                <LoadingCD />
-            ) : (
+        
             <div className="flex items-center justify-center px-18 flex-col">
-
-                <div className='flex flex-left w-full mb-10 mt-5'> 
+                
+                {(articles.length === 0) && (<div className='flex flex-left w-full mb-10 mt-5'> 
                     <h4 className="text-2xl font-bold text-sky-950">LATEST HEALTH NEWS</h4>
-                </div>
+                </div>)}
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
                     {articles.map((article, i) => (
@@ -104,7 +103,7 @@ export default function NewsGrid({
                     </div>
                 )}
             </div>
-            )}
+       
     </>
   );
 }
