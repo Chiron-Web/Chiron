@@ -27,7 +27,7 @@ export default function NewsGrid({
                 
                 {(!isLoading && (articles.length > 0)) ? (
                     <div className='flex flex-left w-full mb-10 mt-5'> 
-                        <h4 className="text-2xl font-bold text-sky-100">LATEST HEALTH NEWS</h4>
+                        <h4 className="text-2xl font-bold text-sky-950">LATEST HEALTH NEWS</h4>
                     </div>
                 ) : (
                     <div className='flex items-cente justify-center w-full mb-10 mt-5'> 
