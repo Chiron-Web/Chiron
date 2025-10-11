@@ -68,7 +68,7 @@ export default function Homepage() {
 
   const handleLoadMore = async () => {
     dispatch(setIsArticleLoading(true));
-    delay(5000);
+    delay(2000);
     dispatch(incrementPage()); // increment page will trigger the useEffect hook to refresh
     
   };
