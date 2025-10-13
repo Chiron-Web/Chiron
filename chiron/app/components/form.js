@@ -78,7 +78,7 @@ export default function ClassificationForm() {
       console.log("Scraped: ", data)
 
       if (data.success && data.content) {
-        setText(data.content);
+        setText(`${data.title || ''} ${data.content || ''}`);
         if (data.image) setArticleImage(data.image);
         if (data.credibilityScore) setArticleCredibilityScore(data.credibilityScore);
         if (data.title) setArticleTitle(data.title);
