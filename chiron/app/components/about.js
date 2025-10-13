@@ -46,19 +46,20 @@ export default function About() {
         <div className="flex justify-center gap-70">
           {/* Member 1 */}
           <div>
-            <div className="w-28 h-28 bg-gray-400 rounded-full mx-auto mb-2"></div>
+            <img src="./Madera.jpg" className="w-28 h-28 bg-gray-400 rounded-full mx-auto mb-2" />
             <p className="text-sky-950">Rojane Kyle Madera</p>
           </div>
 
           {/* Member 2 */}
           <div>
-            <div className="w-28 h-28 bg-gray-400 rounded-full mx-auto mb-2"></div>
+            <img src="./Pelegrino.jpg" className="w-28 h-28 bg-gray-400 rounded-full mx-auto mb-2" />
             <p className="text-sky-950">Michael Patrick Pelegrino</p>
           </div>
 
           {/* Member 3 */}
           <div>
-            <div className="w-28 h-28 bg-gray-400 rounded-full mx-auto mb-2"></div>
+            {/* <div className="w-28 h-28 bg-gray-400 rounded-full mx-auto mb-2"></div> */}
+            <img src="./Depra.jpg" className="w-28 h-28 bg-gray-400 rounded-full mx-auto mb-2" />
             <p className="text-sky-950">Trixie Anne Depra</p>
           </div>
         </div>
