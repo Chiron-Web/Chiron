@@ -1,7 +1,3 @@
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Loader from "./loader";
-
 export default function NewsGrid({ 
   articles = [],
   showStatusBadge = true,
