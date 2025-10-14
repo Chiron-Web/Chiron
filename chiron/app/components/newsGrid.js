@@ -2,10 +2,11 @@ export default function NewsGrid({
   articles = [],
   showStatusBadge = true,
   handleLoadMore,
-  isLoading,
+  isLoading = true,
   hasMore
 }) {
   console.log(`NewsGrid received ${articles.length} initial articles.`);
+  console.log(`News is loading: ${isLoading}`);
 
   function LoadingCD() {
     return (
