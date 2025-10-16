@@ -24,7 +24,7 @@ export default function Homepage() {
   const { page, articles, hasMore, isArticleLoading } = useSelector(
     state => state.articles
   );
-  
+  const { isUrlTab, setIsUrlTab } = useState(true);
 
   useEffect(() => {
     // fetch page 1 on mount
