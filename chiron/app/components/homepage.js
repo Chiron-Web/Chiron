@@ -24,8 +24,7 @@ export default function Homepage() {
   const { page, articles, hasMore, isArticleLoading } = useSelector(
     state => state.articles
   );
-  console.log(`articles has page ${page}`);
-  console.log(`Fetching articles for page ${PAGE_SIZE}: ${FETCH_ARTICLE_URL}?page=${PAGE_SIZE}&pageSize=${page}`);
+  
 
   useEffect(() => {
     // fetch page 1 on mount
