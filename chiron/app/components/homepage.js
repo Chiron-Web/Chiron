@@ -94,6 +94,14 @@ export default function Homepage() {
 
         <div className="flex-grow flex items-center justify-center px-4">
           <div className="w-full max-w-6xl">
+            <div className='w-4/5'>
+              <button className="w-1/2 px-4 py-2 bg-sky-950 text-white rounded cursor-pointer" onClick={() => {setIsUrlTab(true)}}>
+                URL
+              </button>
+              <button className="w-1/2 px-4 py-2 bg-sky-950 text-white rounded cursor-pointer" onClick={() => {setIsUrlTab(false)}}>
+                CONTENT
+              </button>
+            </div>
             <form
               onSubmit={handleSearchSubmit}
               className="flex items-center border rounded px-3 py-2 mb-20 flex flex-col gap-3"
