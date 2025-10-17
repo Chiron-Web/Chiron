@@ -25,7 +25,7 @@ export default function Homepage() {
   const { page, articles, hasMore, isArticleLoading } = useSelector(
     state => state.articles
   );
-  const { isUrlTab, setIsUrlTab } = useState(true);
+  const [isUrlTab, setIsUrlTab] = useState(true);
 
   useEffect(() => {
     // fetch page 1 on mount
@@ -73,6 +73,10 @@ export default function Homepage() {
     
   };
 
+  const handleTab = (e) => {
+    setIsUrlTab(e);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 to-white">
       <Header />
@@ -92,19 +96,19 @@ export default function Homepage() {
         </div>
         
 
-        <div className="flex-grow flex items-center justify-center px-4">
-          <div className="w-full max-w-6xl">
-            <div className='w-4/5'>
-              <button className="w-1/2 px-4 py-2 bg-sky-950 text-white rounded cursor-pointer" onClick={() => {setIsUrlTab(true)}}>
+        <div className="flex-grow flex items-center justify-center text-center px-4">
+          <div className="flex flex-col w-full max-w-6xl items-center justify-center">
+            <div className='w-4/5 flex justify-center items-center border rounded px-3 py-2 mb-2 flex gap-3 px-4 bg-sky-300'>
+              <button className="w-1/2 px-4 py-2 bg-sky-950 text-white rounded cursor-pointer" onClick={() => {handleTab(true)}}>
                 URL
               </button>
-              <button className="w-1/2 px-4 py-2 bg-sky-950 text-white rounded cursor-pointer" onClick={() => {setIsUrlTab(false)}}>
+              <button className="w-1/2 px-4 py-2 bg-sky-950 text-white rounded cursor-pointer" onClick={() => {handleTab(false)}}>
                 CONTENT
               </button>
             </div>
             <form
               onSubmit={handleSearchSubmit}
-              className="flex items-center border rounded px-3 py-2 mb-20 flex flex-col gap-3"
+              className="flex items-center w-full border rounded px-3 py-2 mb-20 flex flex-col gap-3"
             >
               {isUrlTab 
               ? (<input
