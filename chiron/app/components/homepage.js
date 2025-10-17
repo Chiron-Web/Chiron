@@ -17,6 +17,7 @@ export default function Homepage() {
   const [storedArticles, setStoredArticles] = useState([]);
   const PAGE_SIZE = 9;
   const [url, setUrl] = useState('');
+  const [content, setContent] = useState('');
   const [showNews, setShowNews] = useState(false);
   const observerRef = useRef(null);
   const router = useRouter();
@@ -97,13 +98,23 @@ export default function Homepage() {
               onSubmit={handleSearchSubmit}
               className="flex items-center border rounded px-3 py-2 mb-20 flex flex-col gap-3"
             >
-              <input
+              {isUrlTab 
+              ? (<input
                 type="url"
                 placeholder="Paste URL here"
                 className="w-4/5 text-base text-gray-700 focus:outline-none border border-sky-2000 rounded px-3 py-3"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
+              />)
+              : (<textarea
+                type="text"
+                placeholder="Paste Content here"
+                className="w-4/5 text-base text-gray-700 focus:outline-none border border-sky-2000 rounded px-3 py-3"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
               />
+              )}
+
               <button type="submit" className="w-4/5 px-4 py-2 bg-sky-950 text-white rounded cursor-pointer">
                 Verify
               </button>
