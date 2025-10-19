@@ -98,11 +98,11 @@ export default function Homepage() {
 
         <div className="flex-grow flex items-center justify-center text-center px-4">
           <div className="flex flex-col w-full max-w-6xl items-center justify-center">
-            <div className='w-3/5 flex justify-center items-center border rounded px-3 py-2 mb-6 flex gap-3 px-4 bg-sky-800'>
-              <button className="w-1/2 px-4 py-2 bg-sky-950 text-white rounded cursor-pointer" onClick={() => {handleTab(true)}}>
+            <div className='w-3/5 flex justify-center items-center border rounded px-3 py-2 mb-6 flex gap-3 px-4 bg-gray-400'>
+              <button className={`w-1/2 px-4 py-2 bg-gray-50/50 text-sky-950 rounded cursor-pointer ${isUrlTab ? ('border-2 border-sky-2000') : ""}`} onClick={() => {handleTab(true)}}>
                 URL
               </button>
-              <button className="w-1/2 px-4 py-2 bg-sky-950 text-white rounded cursor-pointer" onClick={() => {handleTab(false)}}>
+              <button className={`w-1/2 px-4 py-2 bg-gray-50/50 text-sky-950 rounded cursor-pointer ${!isUrlTab ? ('border-2 border-sky-2000') : ""}`} onClick={() => {handleTab(false)}}>
                 CONTENT
               </button>
             </div>
