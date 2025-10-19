@@ -98,7 +98,7 @@ export default function Homepage() {
 
         <div className="flex-grow flex items-center justify-center text-center px-4">
           <div className="flex flex-col w-full max-w-6xl items-center justify-center">
-            <div className='w-4/5 flex justify-center items-center border rounded px-3 py-2 mb-2 flex gap-3 px-4 bg-sky-300'>
+            <div className='w-3/5 flex justify-center items-center border rounded px-3 py-2 mb-2 flex gap-3 px-4 bg-sky-800'>
               <button className="w-1/2 px-4 py-2 bg-sky-950 text-white rounded cursor-pointer" onClick={() => {handleTab(true)}}>
                 URL
               </button>
