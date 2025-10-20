@@ -1,15 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Loader from "./loader";
-
 export default function NewsGrid({ 
   articles = [],
   showStatusBadge = true,
   handleLoadMore,
-  isLoading,
+  isLoading = true,
   hasMore
 }) {
   console.log(`NewsGrid received ${articles.length} initial articles.`);
+  console.log(`News is loading: ${isLoading}`);
 
   function LoadingCD() {
     return (
@@ -25,13 +22,13 @@ export default function NewsGrid({
         
             <div className="flex items-center justify-center px-18 flex-col">
                 
-                {(!isLoading && (articles.length > 0)) ? (
-                    <div className='flex flex-left w-full mb-10 mt-5'> 
-                        <h4 className="text-2xl font-bold text-sky-100">LATEST HEALTH NEWS</h4>
-                    </div>
-                ) : (
+                {((!isLoading) && (articles.length <= 0)) ? (
                     <div className='flex items-cente justify-center w-full mb-10 mt-5'> 
                         <h6 className="text-l font-bold text-sky-950 opacity-50">There are no verified news to show</h6>
+                    </div>
+                ) : (
+                    <div className='flex flex-left w-full mb-10 mt-5'> 
+                        <h4 className="text-2xl font-bold text-sky-950">LATEST HEALTH NEWS</h4>
                     </div>
                 )}
                 

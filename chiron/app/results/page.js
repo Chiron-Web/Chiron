@@ -109,7 +109,7 @@ export default function ResultPage() {
                   )}
                   {articleTitle !== null && (
                     <span className="py-1 rounded-md text-sky-950 text-l font-medium">
-                      Website Credibility Score: <strong>{articleTitle}</strong>
+                      News Article Title: <strong>{articleTitle}</strong>
                     </span>
                   )}
                 </div>
