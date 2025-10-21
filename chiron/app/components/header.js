@@ -41,7 +41,7 @@ export default function Header() {
       {/* Center: Navigation Links */}
       <nav className="flex gap-8 text-sm">
         <Link href="/" className="text-gray-200 hover:text-white">Home</Link>
-        <Link href="/verify" className="text-gray-200 hover:text-white">Verify News</Link>
+        {/* <Link href="/verify" className="text-gray-200 hover:text-white">Verify News</Link> */}
         <Link href="/about" className="text-gray-200 hover:text-white">About Us</Link>
       </nav>
 
