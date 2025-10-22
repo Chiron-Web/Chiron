@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialUrlState = {
     url: "",
-    content: ""
+    content: "",
+    fetching: false,
 };
 
 const urlSlice = createSlice({
@@ -18,40 +19,38 @@ const urlSlice = createSlice({
     }
 });
 
-export const scrapeContent = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+export const scrapeContent = createAsyncThunk(
+    'url/scrapeContent',
+    async (url) => {
+      try {
+        const response = await fetch('http://127.0.0.1:5000/classify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, url }),
+        });
 
-    try {
-      const response = await fetch('http://127.0.0.1:5000/classify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, url }),
-      });
+        if (!response.ok) {
+          console.error('Error classifying article:', response.statusText);
+        }
+        const data = await response.json();
+        console.log("Classification: ", data);
 
-      if (!response.ok) throw new Error('Failed to classify');
-      const data = await response.json();
-      console.log("Classification: ", data);
+        // Include image and credibility in the result
+        const enrichedResult = {
+          ...data,
+          image: articleImage,
+          credibilityScore: articleCredibilityScore,
+          articleTitle: articleTitle,
+        };
 
-      // Include image and credibility in the result
-      const enrichedResult = {
-        ...data,
-        image: articleImage,
-        credibilityScore: articleCredibilityScore,
-        articleTitle: articleTitle,
-      };
-
-      setClassificationResult(enrichedResult);
-      setSubmittedText(text);
-      router.push('/results');
-    } catch (error) {
-      setClassificationResult({ news_type: 'error', error: error.message });
-      setSubmittedText(text);
-      router.push('/results');
-    } finally {
-      setLoading(false);
+        return enrichedResult;
+      } catch (error) {
+        console.error('Error during classification:', error);
+      } finally {
+        fetching = false;
+      }
     }
-  };
+);
 
 export const { setUrl, setContent } = urlSlice.actions;
 
