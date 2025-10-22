@@ -15,7 +15,19 @@ const urlSlice = createSlice({
         },
         setContent: (state, action) => {
             state.content = action.payload;
+        },
+        setFetchingStatus: (state, action) => {
+            state.fetching = action.payload;
         }
+    },
+    extraReducers: (builder) => {
+      builder.addCase(scrapeContent.pending, (state) => {
+        state.fetching = true;
+      });
+      builder.addCase(scrapeContent.fulfilled, (state, action) => {
+        state.fetching = false;
+        state.content = action.payload;
+      });
     }
 });
 
@@ -31,6 +43,11 @@ export const scrapeContent = createAsyncThunk(
 
         if (!response.ok) {
           console.error('Error classifying article:', response.statusText);
+          return {...data,
+            image: null,
+            credibilityScore: null,
+            articleTitle: null
+          };
         }
         const data = await response.json();
         console.log("Classification: ", data);
@@ -46,8 +63,6 @@ export const scrapeContent = createAsyncThunk(
         return enrichedResult;
       } catch (error) {
         console.error('Error during classification:', error);
-      } finally {
-        fetching = false;
       }
     }
 );
