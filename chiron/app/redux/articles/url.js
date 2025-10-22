@@ -67,6 +67,7 @@ export const scrapeContent = createAsyncThunk(
     }
 );
 
-export const { setUrl, setContent } = urlSlice.actions;
+export const { setUrl, setContent, setFetchingStatus } = urlSlice.actions;
+export {scrapeContent};
 
 export const urlReducer = urlSlice.reducer;
