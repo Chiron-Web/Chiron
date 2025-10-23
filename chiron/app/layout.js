@@ -23,7 +23,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="./icon.png" />
+        <link rel="icon" href="./logo.png" />
       </head>
       <body>
         <ClassificationProvider>{children}</ClassificationProvider>
