@@ -32,7 +32,35 @@ const urlSlice = createSlice({
 });
 
 export const scrapeContent = createAsyncThunk(
-    'url/scrapeContent',
+  'url/scrapeContent',
+  async (url) => {
+    try {
+      const response = await fetch('http://localhost:4000/scrape', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url }),
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch content');
+      const data = await response.json();
+      console.log("Scraped: ", data)
+
+      if (data.success && data.content) {
+        setText(`${data.title || ''} ${data.content || ''}`);
+        if (data.image) setArticleImage(data.image);
+        if (data.credibilityScore) setArticleCredibilityScore(data.credibilityScore);
+        if (data.title) setArticleTitle(data.title);
+      } else {
+        alert('Failed to extract content from the URL');
+      }
+    } catch (error) {
+      console.error('Error scraping content:', error);
+    }
+  }
+)
+
+export const classifyContent = createAsyncThunk(
+    'url/classifyContent',
     async (url) => {
       try {
         const response = await fetch('http://127.0.0.1:5000/classify', {
