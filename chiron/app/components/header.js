@@ -31,12 +31,12 @@ export default function Header() {
   });
 
   return (
-    <div className="header py-4 px-10 bg-sky-950 text-white shadow-md flex items-center justify-between">
+    <div className="header py-4 px-10 text-white flex items-center justify-between">
       <nav className="flex gap-8 text-sm">
-        <Link href="/" className="text-gray-200 hover:text-white">Home</Link>
-        <Link href="*" className="text-gray-200 hover:text-white">Latest News</Link>
+        <Link href="/" className="text-sky-950 hover:text-white">Home</Link>
+        <Link href="*" className="text-sky-950 hover:text-white">Latest News</Link>
         {/* <Link href="/verify" className="text-gray-200 hover:text-white">Verify News</Link> */}
-        <Link href="/about" className="text-gray-200 hover:text-white">About Us</Link>
+        <Link href="/about" className="text-sky-950 hover:text-white">About Us</Link>
       </nav>
 
       {/* Right: Clock */}
