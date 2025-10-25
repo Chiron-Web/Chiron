@@ -35,7 +35,7 @@ export default function NewsGrid({
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
                     {(articles.length != 0) && articles.map((article, i) => (
                         <div
-                            key={article._id || i}
+                            key={`${article._id + i}` || i}
                             className="bg-white rounded shadow overflow-hidden hover:shadow-md transition-shadow flex flex-col"
                         >
                             <a 
