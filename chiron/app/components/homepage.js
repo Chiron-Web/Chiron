@@ -98,36 +98,36 @@ export default function Homepage() {
 
         <div className="flex-grow flex items-center justify-center text-center px-4">
           <div className="flex flex-col w-full max-w-6xl items-center justify-center">
-            <div className='w-3/5 flex justify-center items-center border rounded px-3 py-2 mb-6 flex gap-3 px-4 bg-gray-400'>
-              <button className={`w-1/2 px-4 py-2 bg-gray-50/50 text-sky-950 rounded cursor-pointer ${isUrlTab ? ('border-2 border-sky-2000') : ""}`} onClick={() => {handleTab(true)}}>
+            <div className='w-3/5 flex justify-center items-center border rounded-[8] px-3 py-2 mb-6 flex gap-3 px-4 bg-slate-500/15'>
+              <button className={`w-1/2 px-4 py-2 text-sky-950 rounded-md cursor-pointer bg-blue-100/80 ${isUrlTab ? ('border-2 border-sky-2000') : ""}`} onClick={() => {handleTab(true)}}>
                 URL
               </button>
-              <button className={`w-1/2 px-4 py-2 bg-gray-50/50 text-sky-950 rounded cursor-pointer ${!isUrlTab ? ('border-2 border-sky-2000') : ""}`} onClick={() => {handleTab(false)}}>
+              <button className={`w-1/2 px-4 py-2 text-sky-950 rounded-md cursor-pointer bg-blue-100/80 ${!isUrlTab ? ('border-2 border-sky-2000') : ""}`} onClick={() => {handleTab(false)}}>
                 CONTENT
               </button>
             </div>
             <form
               onSubmit={handleSearchSubmit}
-              className="flex items-center w-full border rounded px-3 py-2 mb-20 flex flex-col gap-3"
+              className="flex items-center w-full border rounded-md px-3 py-2 mb-20 flex flex-col gap-3"
             >
               {isUrlTab 
               ? (<input
                 type="url"
                 placeholder="Paste URL here"
-                className="w-4/5 text-base text-gray-700 focus:outline-none border border-sky-2000 rounded px-3 py-3"
+                className="w-4/5 text-base text-gray-700 focus:outline-none border border-sky-2000 rounded-md px-3 py-3"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
               />)
               : (<textarea
                 type="text"
                 placeholder="Paste Content here"
-                className="w-4/5 text-base text-gray-700 focus:outline-none border border-sky-2000 rounded px-3 py-3"
+                className="w-4/5 text-base text-gray-700 focus:outline-none border border-sky-2000 rounded-md px-3 py-3"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
               )}
 
-              <button type="submit" className="w-4/5 px-4 py-2 bg-sky-950 text-white rounded cursor-pointer">
+              <button type="submit" className="w-4/5 px-4 py-2 bg-sky-950 text-white rounded-md cursor-pointer">
                 Verify
               </button>
             </form>
