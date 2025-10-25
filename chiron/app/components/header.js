@@ -31,7 +31,7 @@ export default function Header() {
   });
 
   return (
-    <div className="header py-4 px-10 text-white flex items-center justify-between">
+    <div className="header py-4 px-10 text-white flex items-center justify-between bg-transparent ">
       <nav className="flex gap-8 text-sm">
         <Link href="/" className="text-sky-950 hover:text-white">Home</Link>
         <Link href="*" className="text-sky-950 hover:text-white">Latest News</Link>
