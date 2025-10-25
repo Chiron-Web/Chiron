@@ -32,11 +32,11 @@ export default function NewsGrid({
                     </div>
                 )}
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 ">
                     {(articles.length != 0) && articles.map((article, i) => (
                         <div
                             key={`${article._id + i}` || i}
-                            className="bg-white rounded shadow overflow-hidden hover:shadow-md transition-shadow flex flex-col"
+                            className="rounded-md bg-white rounded shadow overflow-hidden hover:shadow-xl transition-shadow flex flex-col"
                         >
                             <a 
                             href={article.url} 
@@ -51,7 +51,7 @@ export default function NewsGrid({
                             />
                             </a>
                             
-                            <div className="p-4 text-sm text-gray-800 flex-grow flex flex-col">
+                            <div className="p-4 text-sm text-white flex-grow flex flex-col bg-sky-950">
                             <div className="flex justify-between items-start mb-1">
                                 <a 
                                 href={article.url} 
@@ -76,6 +76,10 @@ export default function NewsGrid({
                                     : parsedDate.toLocaleDateString();
                                 })()}
                             </p>
+
+                            <button className="text-base font-semibold text-sky-950 bg-[#FFB703] rounded-lg p-2 my-2 hover:bg-[#E69A00] transition-colors w-full cursor-pointer">
+                                Visit Page
+                            </button>
 
                             {/* 
                             */}
