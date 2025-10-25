@@ -77,9 +77,14 @@ export default function NewsGrid({
                                 })()}
                             </p>
 
-                            <button className="text-base font-semibold text-sky-950 bg-[#FFB703] rounded-lg p-2 my-2 hover:bg-[#E69A00] transition-colors w-full cursor-pointer">
+                            <a
+                            href={article.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-base font-semibold text-sky-950 bg-[#FFB703] rounded-lg p-2 my-2 hover:bg-[#E69A00] transition-colors w-full text-center block"
+                            >
                                 Visit Page
-                            </button>
+                            </a>
 
                             {/* 
                             */}
