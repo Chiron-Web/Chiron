@@ -12,7 +12,7 @@ export default function About() {
 
       {/* Logo */}
       <div className="flex justify-center my-6">
-        <Image src="/logo-black.png" alt="CHIRON Logo" width={100} height={100} />
+        <Image src="/logo-sky.png" alt="CHIRON Logo" width={100} height={100} />
       </div>
 
       {/* Description */}

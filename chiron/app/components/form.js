@@ -98,7 +98,7 @@ export default function ClassificationForm() {
 
       <div className="text-center text-gray-700 mt-20 flex items-center justify-center">
         <img
-          src="/logo-black.png"
+          src="/logo-sky.png"
           alt="CHIRON Logo"
           className="w-10 h-10 mr-2"
         />
