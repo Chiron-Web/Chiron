@@ -33,7 +33,7 @@ export default function NewsGrid({
             observer.unobserve(observerRef.current);
             }
         };
-    }, []);
+    }, [handleLoadMore, hasMore, isLoading]);
 
   function LoadingCD() {
     return (
@@ -134,15 +134,16 @@ export default function NewsGrid({
                     <LoadingCD />
                 )}
             
-
-                {!isLoading && hasMore 
-                ? (<div ref={observerRef} className="h-1 mt-20" />)
-                : (
+                {!isLoading && hasMore && (
+                    <div ref={observerRef} className="h-1 mt-20" />
+                )}
+                {!isLoading && !hasMore 
+                && (
                     <div className="flex justify-center mt-6 mb-10">
                         <h6 className="text-l font-bold text-sky-950 opacity-50">There are no verified news to load</h6>    
                     </div>
-                )
-            }
+                    )
+                }
             </div>
        
     </>
