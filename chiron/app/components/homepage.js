@@ -14,7 +14,6 @@ const delay = (timeoutTime) => {
 
 export default function Homepage() {
   const FETCH_ARTICLE_URL = 'https://chiron-news.onrender.com/news/articles';
-  const [storedArticles, setStoredArticles] = useState([]);
   const PAGE_SIZE = 9;
   const [url, setUrl] = useState('');
   const [content, setContent] = useState('');

@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 export default function NewsGrid({ 
   articles = [],
   showStatusBadge = true,
@@ -5,8 +7,33 @@ export default function NewsGrid({
   isLoading = true,
   hasMore
 }) {
-  console.log(`NewsGrid received ${articles.length} initial articles.`);
-  console.log(`News is loading: ${isLoading}`);
+  const observerRef = useRef(null);
+
+    useEffect(() => {
+        if (!hasMore || isLoading) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+            if (entry.isIntersecting) {
+                handleLoadMore();
+            }
+            },
+            {
+                root: null,
+                rootMargin: '0px',
+                threshold: 1.0,
+            }
+        );
+
+        if (observerRef.current) {
+            observer.observe(observerRef.current);
+        }
+
+        return () => {
+            if (observerRef.current) {
+            observer.unobserve(observerRef.current);
+            }
+        };
+    }, [handleLoadMore, hasMore, isLoading]);
 
   function LoadingCD() {
     return (
@@ -77,9 +104,14 @@ export default function NewsGrid({
                                 })()}
                             </p>
 
-                            <button className="text-base font-semibold text-sky-950 bg-[#FFB703] rounded-lg p-2 my-2 hover:bg-[#E69A00] transition-colors w-full cursor-pointer">
+                            <a
+                            href={article.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-base font-semibold text-sky-950 bg-[#FFB703] rounded-lg p-2 my-2 hover:bg-[#E69A00] transition-colors w-full text-center block"
+                            >
                                 Visit Page
-                            </button>
+                            </a>
 
                             {/* 
                             */}
@@ -102,18 +134,16 @@ export default function NewsGrid({
                     <LoadingCD />
                 )}
             
-
                 {!isLoading && hasMore && (
-                    <div className="flex justify-center mt-6 mb-10">
-                    <button
-                        onClick={handleLoadMore}
-                        disabled={isLoading}
-                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-                    >
-                        {isLoading ? 'Loading...' : 'Load More'}
-                    </button>
-                    </div>
+                    <div ref={observerRef} className="h-1 mt-20" />
                 )}
+                {!isLoading && !hasMore 
+                && (
+                    <div className="flex justify-center mt-6 mb-10">
+                        <h6 className="text-l font-bold text-sky-950 opacity-50">There are no verified news to load</h6>    
+                    </div>
+                    )
+                }
             </div>
        
     </>
