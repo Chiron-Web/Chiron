@@ -7,32 +7,32 @@ export default function NewsGrid({
   isLoading = true,
   hasMore
 }) {
-  console.log(`NewsGrid received ${articles.length} initial articles.`);
-  console.log(`News is loading: ${isLoading}`);
+  const observerRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => {
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            handleLoadMore();
-          }
-        },
-        {
-          root: null,
-          rootMargin: '0px',
-          threshold: 1.0,
-        }
-      );
-  
-      if (observerRef.current) {
-        observer.observe(observerRef.current);
-      }
-  
-      return () => {
+    useEffect(() => {
+        if (!hasMore || isLoading) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+            if (entry.isIntersecting) {
+                handleLoadMore();
+            }
+            },
+            {
+                root: null,
+                rootMargin: '0px',
+                threshold: 1.0,
+            }
+        );
+
         if (observerRef.current) {
-          observer.unobserve(observerRef.current);
+            observer.observe(observerRef.current);
         }
-      };
+
+        return () => {
+            if (observerRef.current) {
+            observer.unobserve(observerRef.current);
+            }
+        };
     }, []);
 
   function LoadingCD() {
