@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 export default function NewsGrid({ 
   articles = [],
   showStatusBadge = true,
@@ -7,6 +9,31 @@ export default function NewsGrid({
 }) {
   console.log(`NewsGrid received ${articles.length} initial articles.`);
   console.log(`News is loading: ${isLoading}`);
+
+  useEffect(() => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            handleLoadMore();
+          }
+        },
+        {
+          root: null,
+          rootMargin: '0px',
+          threshold: 1.0,
+        }
+      );
+  
+      if (observerRef.current) {
+        observer.observe(observerRef.current);
+      }
+  
+      return () => {
+        if (observerRef.current) {
+          observer.unobserve(observerRef.current);
+        }
+      };
+    }, []);
 
   function LoadingCD() {
     return (
@@ -108,17 +135,24 @@ export default function NewsGrid({
                 )}
             
 
-                {!isLoading && hasMore && (
+                {!isLoading && hasMore ? (
+                    // <div className="flex justify-center mt-6 mb-10">
+                    // <button
+                    //     onClick={handleLoadMore}
+                    //     disabled={isLoading}
+                    //     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+                    // >
+                    //     {isLoading ? 'Loading...' : 'Load More'}
+                    // </button>
+                    // </div>
+                    <div ref={observerRef} className="h-1 mt-20" />
+                )
+                : (
                     <div className="flex justify-center mt-6 mb-10">
-                    <button
-                        onClick={handleLoadMore}
-                        disabled={isLoading}
-                        className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-                    >
-                        {isLoading ? 'Loading...' : 'Load More'}
-                    </button>
+                        <h6 className="text-l font-bold text-sky-950 opacity-50">There are no verified news to load</h6>    
                     </div>
-                )}
+                )
+            }
             </div>
        
     </>
