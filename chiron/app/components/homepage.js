@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import NewsGrid from './newsGrid';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchArticles, setIsArticleLoading, incrementPage } from '../redux/articles/articles';
-import { scrapeContent, classifyContent, setContent, setUrl } from '../redux/articles/url';  
+import { scrapeContent, classifyContent, addContent, addUrl } from '../redux/articles/url';  
 
 const delay = (timeoutTime) => {
   setTimeout(() => {
@@ -79,10 +79,10 @@ export default function Homepage() {
 
   const handleVerify = () => {
     if (isUrlTab && url) {
-      dispatch(setUrl(url));
+      dispatch(addUrl(url));
       dispatch(scrapeContent(url));
     } else if (!isUrlTab && content) {
-      dispatch(setContent(content));
+      dispatch(addContent(content));
       dispatch(classifyContent(content));
     }
   };
