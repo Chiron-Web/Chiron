@@ -4,16 +4,17 @@ const initialUrlState = {
     url: "",
     content: "",
     fetching: false,
+    classificationResult: null,
 };
 
 const urlSlice = createSlice({
     name: "url",
     initialState: initialUrlState,
     reducers: {
-        setUrl: (state, action) => {
+        addUrl: (state, action) => {
             state.url = action.payload;
         },
-        setContent: (state, action) => {
+        addContent: (state, action) => {
             state.content = action.payload;
         },
         setFetchingStatus: (state, action) => {
@@ -26,7 +27,7 @@ const urlSlice = createSlice({
       });
       builder.addCase(scrapeContent.fulfilled, (state, action) => {
         state.fetching = false;
-        state.content = action.payload;
+        state.classificationResult = action.payload;
       });
     }
 });
@@ -35,6 +36,7 @@ export const scrapeContent = createAsyncThunk(
   'url/scrapeContent',
   async (url) => {
     try {
+      console.log("Scraping URL: ", url);
       const response = await fetch('http://localhost:4000/scrape', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -61,13 +63,16 @@ export const scrapeContent = createAsyncThunk(
 
 export const classifyContent = createAsyncThunk(
     'url/classifyContent',
-    async (url) => {
+    async (text) => {
       try {
+        console.log("Classifying content for content: ", text);
         const response = await fetch('http://127.0.0.1:5000/classify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text, url }),
+          body: JSON.stringify({ text }),
         });
+
+        console.log("Response from classify endpoint: ", response);
 
         if (!response.ok) {
           console.error('Error classifying article:', response.statusText);
@@ -95,7 +100,7 @@ export const classifyContent = createAsyncThunk(
     }
 );
 
-export const { setUrl, setContent, setFetchingStatus } = urlSlice.actions;
+export const { addUrl, addContent, setFetchingStatus } = urlSlice.actions;
 export {scrapeContent, classifyContent};
 
 export const urlReducer = urlSlice.reducer;
