@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import NewsGrid from './newsGrid';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchArticles, setIsArticleLoading, incrementPage } from '../redux/articles/articles';
+import { scrapeContent, classifyContent, addContent, addUrl } from '../redux/articles/url';  
 
 const delay = (timeoutTime) => {
   setTimeout(() => {
@@ -24,6 +25,9 @@ export default function Homepage() {
   const { page, articles, hasMore, isArticleLoading } = useSelector(
     state => state.articles
   );
+  const { classificationResult, fetching, classifying, textContent } = useSelector(
+    state => state.url
+  );
   const [isUrlTab, setIsUrlTab] = useState(true);
 
   useEffect(() => {
@@ -39,6 +43,18 @@ export default function Homepage() {
       router.push(`/verify?url=${encodeURIComponent(url)}`);
     }
   };
+
+  useEffect(() => {
+    if (classificationResult && !classifying) {
+      router.push('/results');
+    }
+  }, [classificationResult, classifying]);
+
+  useEffect(() => {
+    if (textContent && !fetching) {
+      dispatch(classifyContent(textContent));
+    }
+  }, [textContent, fetching]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -76,6 +92,17 @@ export default function Homepage() {
     setIsUrlTab(e);
   };
 
+  const handleVerify = (e) => {
+    e.preventDefault();
+    if (isUrlTab && url) {
+      dispatch(addUrl(url));
+      dispatch(scrapeContent(url));
+    } else if (!isUrlTab && content) {
+      dispatch(addContent(content));
+      dispatch(classifyContent(content));
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 to-white">
       <Header />
@@ -106,7 +133,7 @@ export default function Homepage() {
               </button>
             </div>
             <form
-              onSubmit={handleSearchSubmit}
+              onSubmit={handleVerify}
               className="flex items-center w-full border rounded-md px-3 py-2 mb-20 flex flex-col gap-3"
             >
               {isUrlTab 
@@ -126,8 +153,8 @@ export default function Homepage() {
               />
               )}
 
-              <button type="submit" className="w-4/5 px-4 py-2 bg-sky-950 text-white rounded-md cursor-pointer">
-                Verify
+              <button disabled={fetching || classifying} type="submit" className="w-4/5 px-4 py-2 bg-sky-950 text-white rounded-md cursor-pointer">
+                {fetching || classifying ? 'Processing...' : 'Verify'}
               </button>
             </form>
           </div>

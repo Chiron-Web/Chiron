@@ -1,27 +1,19 @@
 'use client';
 
-import { useClassification } from '../components/context';
-import { useRouter } from 'next/navigation';
 import Header from '../components/header';
 import Footer from '../components/footer';
-import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { use } from 'react';
 
 export default function ResultPage() {
-  const { classificationResult, submittedText } = useClassification();
-  const router = useRouter();
+  const { classificationResult, fetching, classifying, textContent } = useSelector(
+    state => state.url
+  );
+  const { credibilityScore, articleTitle, submittedText } = useSelector(
+    state => state.scrapingResult || { credibilityScore: null, articleTitle: null, submittedText: textContent }
+  );
 
-
-
-
-  useEffect(() => {
-    if (!classificationResult) {
-      router.push('/');
-    }
-  }, [classificationResult]);
-
-  if (!classificationResult) return null;
-
-  const { news_type, authenticity, authenticity_confidence, image, credibilityScore, articleTitle, error } = classificationResult;
+  const {authenticity_confidence, news_type, authenticity, error, image} = classificationResult || {};
 
   const isHealth = news_type?.toLowerCase() === 'health';
   const isFake = isHealth && authenticity?.toLowerCase() === 'fake';

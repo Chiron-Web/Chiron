@@ -2,19 +2,22 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialUrlState = {
     url: "",
-    content: "",
+    textContent: "",
     fetching: false,
+    classifying: false,
+    classificationResult: null,
+    scrapingResult: null,
 };
 
 const urlSlice = createSlice({
     name: "url",
     initialState: initialUrlState,
     reducers: {
-        setUrl: (state, action) => {
+        addUrl: (state, action) => {
             state.url = action.payload;
         },
-        setContent: (state, action) => {
-            state.content = action.payload;
+        addContent: (state, action) => {
+            state.textContent = action.payload;
         },
         setFetchingStatus: (state, action) => {
             state.fetching = action.payload;
@@ -26,7 +29,16 @@ const urlSlice = createSlice({
       });
       builder.addCase(scrapeContent.fulfilled, (state, action) => {
         state.fetching = false;
-        state.content = action.payload;
+        state.textContent = action.payload.content;
+        state.scrapingResult = action.payload;
+      });
+
+      builder.addCase(classifyContent.pending, (state) => {
+        state.classifying = true;
+      });
+      builder.addCase(classifyContent.fulfilled, (state, action) => {
+        state.classifying = false;
+        state.classificationResult = action.payload;
       });
     }
 });
@@ -35,6 +47,7 @@ export const scrapeContent = createAsyncThunk(
   'url/scrapeContent',
   async (url) => {
     try {
+      console.log("Scraping URL: ", url);
       const response = await fetch('http://localhost:4000/scrape', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -46,10 +59,8 @@ export const scrapeContent = createAsyncThunk(
       console.log("Scraped: ", data)
 
       if (data.success && data.content) {
-        setText(`${data.title || ''} ${data.content || ''}`);
-        if (data.image) setArticleImage(data.image);
-        if (data.credibilityScore) setArticleCredibilityScore(data.credibilityScore);
-        if (data.title) setArticleTitle(data.title);
+        data.content = `${data.title || ''} ${data.content || ''}`;
+        return data;
       } else {
         alert('Failed to extract content from the URL');
       }
@@ -60,42 +71,38 @@ export const scrapeContent = createAsyncThunk(
 )
 
 export const classifyContent = createAsyncThunk(
-    'url/classifyContent',
-    async (url) => {
-      try {
-        const response = await fetch('http://127.0.0.1:5000/classify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text, url }),
-        });
+  'url/classifyContent',
+  async (text) => {
+    try {
+      console.log("Classifying content for:", text);
 
-        if (!response.ok) {
-          console.error('Error classifying article:', response.statusText);
-          return {...data,
-            image: null,
-            credibilityScore: null,
-            articleTitle: null
-          };
-        }
-        const data = await response.json();
-        console.log("Classification: ", data);
+      const response = await fetch('http://127.0.0.1:5000/classify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
 
-        // Include image and credibility in the result
-        const enrichedResult = {
-          ...data,
-          image: articleImage,
-          credibilityScore: articleCredibilityScore,
-          articleTitle: articleTitle,
+      if (!response.ok) {
+        console.error('Error classifying article:', response.statusText);
+        return {
+          status: 'error',
+          news_type: null,
+          authenticity: null,
+          authenticity_confidence: null,
         };
-
-        return enrichedResult;
-      } catch (error) {
-        console.error('Error during classification:', error);
       }
+
+      const data = await response.json();
+      console.log("Classification result:", data);
+      return data;
+    } catch (error) {
+      console.error('Error during classification:', error);
+      throw error; // (important so rejected state triggers in Redux)
     }
+  }
 );
 
-export const { setUrl, setContent, setFetchingStatus } = urlSlice.actions;
-export {scrapeContent};
+export const { addUrl, addContent, setFetchingStatus } = urlSlice.actions;
+export {scrapeContent, classifyContent};
 
 export const urlReducer = urlSlice.reducer;
