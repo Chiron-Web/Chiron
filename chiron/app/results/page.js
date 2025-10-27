@@ -3,10 +3,14 @@
 import Header from '../components/header';
 import Footer from '../components/footer';
 import { useSelector } from 'react-redux';
+import { use } from 'react';
 
 export default function ResultPage() {
   const { classificationResult, fetching, classifying, textContent } = useSelector(
     state => state.url
+  );
+  const { credibilityScore, articleTitle, submittedText } = useSelector(
+    state => state.scrapingResult || { credibilityScore: null, articleTitle: null, submittedText: textContent }
   );
 
   const {authenticity_confidence, news_type, authenticity, error, image} = classificationResult || {};
