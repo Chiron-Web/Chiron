@@ -10,9 +10,9 @@
 
     "api1": "cd api1 && npm run dev",
     "api2": "cd api2 && npm run dev",
-    "frontend": "cd frontend && npm start",
+    "frontend": "",
 
-    "start all": "start cmd /k \"npm run api1\" && start cmd /k \"npm run api2\" && start cmd /k \"npm run frontend\""
+    "start:all": "start cmd /k \"npm run api1\" && start cmd /k \"npm run api2\" && start cmd /k \"npm run frontend\""
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
