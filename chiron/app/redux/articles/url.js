@@ -96,6 +96,6 @@ export const classifyContent = createAsyncThunk(
 );
 
 export const { setUrl, setContent, setFetchingStatus } = urlSlice.actions;
-export {scrapeContent};
+export {scrapeContent, classifyContent};
 
 export const urlReducer = urlSlice.reducer;
