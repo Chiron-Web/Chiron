@@ -6,6 +6,7 @@ const initialUrlState = {
     fetching: false,
     classifying: false,
     classificationResult: null,
+    scrapingResult: null,
 };
 
 const urlSlice = createSlice({
@@ -29,6 +30,7 @@ const urlSlice = createSlice({
       builder.addCase(scrapeContent.fulfilled, (state, action) => {
         state.fetching = false;
         state.textContent = action.payload.content;
+        state.scrapingResult = action.payload;
       });
 
       builder.addCase(classifyContent.pending, (state) => {
