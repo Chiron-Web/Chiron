@@ -2,8 +2,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialUrlState = {
     url: "",
-    content: "",
+    textContent: "",
     fetching: false,
+    classifying: false,
     classificationResult: null,
 };
 
@@ -15,7 +16,7 @@ const urlSlice = createSlice({
             state.url = action.payload;
         },
         addContent: (state, action) => {
-            state.content = action.payload;
+            state.textContent = action.payload;
         },
         setFetchingStatus: (state, action) => {
             state.fetching = action.payload;
@@ -27,6 +28,14 @@ const urlSlice = createSlice({
       });
       builder.addCase(scrapeContent.fulfilled, (state, action) => {
         state.fetching = false;
+        state.textContent = action.payload.content;
+      });
+
+      builder.addCase(classifyContent.pending, (state) => {
+        state.classifying = true;
+      });
+      builder.addCase(classifyContent.fulfilled, (state, action) => {
+        state.classifying = false;
         state.classificationResult = action.payload;
       });
     }
@@ -48,10 +57,8 @@ export const scrapeContent = createAsyncThunk(
       console.log("Scraped: ", data)
 
       if (data.success && data.content) {
-        setText(`${data.title || ''} ${data.content || ''}`);
-        if (data.image) setArticleImage(data.image);
-        if (data.credibilityScore) setArticleCredibilityScore(data.credibilityScore);
-        if (data.title) setArticleTitle(data.title);
+        data.content = `${data.title || ''} ${data.content || ''}`;
+        return data;
       } else {
         alert('Failed to extract content from the URL');
       }
