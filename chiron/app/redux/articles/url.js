@@ -69,42 +69,35 @@ export const scrapeContent = createAsyncThunk(
 )
 
 export const classifyContent = createAsyncThunk(
-    'url/classifyContent',
-    async (text) => {
-      try {
-        console.log("Classifying content for content: ", text);
-        const response = await fetch('http://127.0.0.1:5000/classify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text }),
-        });
+  'url/classifyContent',
+  async (text) => {
+    try {
+      console.log("Classifying content for:", text);
 
-        console.log("Response from classify endpoint: ", response);
+      const response = await fetch('http://127.0.0.1:5000/classify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      });
 
-        if (!response.ok) {
-          console.error('Error classifying article:', response.statusText);
-          return {...data,
-            image: null,
-            credibilityScore: null,
-            articleTitle: null
-          };
-        }
-        const data = await response.json();
-        console.log("Classification: ", data);
-
-        // Include image and credibility in the result
-        const enrichedResult = {
-          ...data,
-          image: articleImage,
-          credibilityScore: articleCredibilityScore,
-          articleTitle: articleTitle,
+      if (!response.ok) {
+        console.error('Error classifying article:', response.statusText);
+        return {
+          status: 'error',
+          news_type: null,
+          authenticity: null,
+          authenticity_confidence: null,
         };
-
-        return enrichedResult;
-      } catch (error) {
-        console.error('Error during classification:', error);
       }
+
+      const data = await response.json();
+      console.log("Classification result:", data);
+      return data;
+    } catch (error) {
+      console.error('Error during classification:', error);
+      throw error; // (important so rejected state triggers in Redux)
     }
+  }
 );
 
 export const { addUrl, addContent, setFetchingStatus } = urlSlice.actions;
