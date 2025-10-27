@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import NewsGrid from './newsGrid';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchArticles, setIsArticleLoading, incrementPage } from '../redux/articles/articles';
+import { scrapeContent, classifyContent, setContent, setUrl } from '../redux/articles/url';  
 
 const delay = (timeoutTime) => {
   setTimeout(() => {
@@ -76,6 +77,16 @@ export default function Homepage() {
     setIsUrlTab(e);
   };
 
+  const handleVerify = () => {
+    if (isUrlTab && url) {
+      dispatch(setUrl(url));
+      dispatch(scrapeContent(url));
+    } else if (!isUrlTab && content) {
+      dispatch(setContent(content));
+      dispatch(classifyContent(content));
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 to-white">
       <Header />
@@ -126,7 +137,7 @@ export default function Homepage() {
               />
               )}
 
-              <button type="submit" className="w-4/5 px-4 py-2 bg-sky-950 text-white rounded-md cursor-pointer">
+              <button onClick={() => handleVerify()} type="submit" className="w-4/5 px-4 py-2 bg-sky-950 text-white rounded-md cursor-pointer">
                 Verify
               </button>
             </form>
