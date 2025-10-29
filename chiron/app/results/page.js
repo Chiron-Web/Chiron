@@ -108,7 +108,7 @@ export default function ResultPage() {
               </div>
               
               <div className="relative max-w-full max-h-[400px] overflow-y-auto">
-                <p className="text-gray-950 whitespace-pre-line text-sm">{submittedText}</p>
+                <p className="text-gray-950 whitespace-pre-line ">{submittedText}</p>
               </div>
             </div>
           </div>
