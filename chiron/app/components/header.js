@@ -10,11 +10,12 @@ export default function Header() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [hasMounted, setHasMounted] = useState(false);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const handleLatestNewsClick = (e) => {
     e.preventDefault(); // prevent full reload
     dispatch(setLatestHealthNews(true));
-    window.history.pushState({}, '', '/'); // navigate to home without reload
+    router.push('/');
   };
 
   useEffect(() => {
@@ -43,8 +44,8 @@ export default function Header() {
     <div className="header py-4 px-10 text-white flex items-center justify-between">
       <nav className="flex gap-8 text-sm">
         <Link href="/" className="text-sky-950 hover:text-white">Home</Link>
-        <button onClick={handleLatestNewsClick} className="text-sky-950 hover:text-white">Latest News</button>
-        {/* <Link href="/" className="text-sky-950 hover:text-white">Latest Health News</Link> */}
+        {/* <button onClick={handleLatestNewsClick} className="text-sky-950 hover:text-white">Latest News</button> */}
+        <Link href="/" className="text-sky-950 hover:text-white">Latest Health News</Link>
         {/* <Link href="/verify" className="text-gray-200 hover:text-white">Verify News</Link> */}
         <Link href="/about" className="text-sky-950 hover:text-white">About Us</Link>
       </nav>
