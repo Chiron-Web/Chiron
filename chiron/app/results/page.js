@@ -41,38 +41,58 @@ export default function ResultPage() {
 
 
       <main className="flex justify-center px-6 mt-10 mb-10">
-        <div className="border border-sky-950 rounded-xl p-6 w-[70%] max-w-7xl">
+        <div className="w-[90%] max-w-7xl flex flex-col">
 
-          <div className="">
-            <div className="flex gap-4 p-4 flex-col items-center justify-center">
-              <div className="relative w-[350px] h-auto">
-                <img
-                  src={image || (isFake ? '/fake.png' : isAuthentic ? '/authentic.jpg' : '/general.png')}
-                  alt="Article Preview"
-                  width={300}
-                  height={300}
-                  className="object-cover rounded-md w-full"
-                />
-                
-                {isAuthentic && (
-                  <img
-                    src="/authentic-stamp.png"
-                    alt="Authentic Label"
-                    className="absolute top-2 right-2 w-40 h-40 opacity-90"
-                  />
-                )}
-
-                {isFake && (
-                  <img
-                    src="/fake-stamp.png"
-                    alt="Fake Label"
-                    className="absolute top-2 right-2 w-40 h-40 opacity-90"
-                  />
-                )}
+          <div className="flex flex-row items-start h-full mb-5">
+            <div className={`w-3/5 h-full flex gap-4 p-4 flex-col items-center justify-center bg-gradient-to-b from-green-100 to-white border border-sky-950 rounded-l-xl p-6`}>
+              
+              
+              {articleTitle !== null && (
+                <span className="article-title py-1 rounded-md text-sky-950 text-l font-medium">
+                  News Article Title: <strong>{articleTitle}</strong>
+                </span>
+              )}
+              
+              <div className="relative max-w-full h-full overflow-y-auto">
+                <p className="text-gray-950 whitespace-pre-line text-m">
+                  {submittedText.split(" ").map((word, index) => (
+                    <span key={index} className="bg-green-500 px-1">
+                      {word}{" "}
+                    </span>
+                  ))}
+                </p>
               </div>
               
-              <p className="mb-4 text-sky-950 text-2xl">{getMessage()}</p>
-              <div className='w-full flex items-start'>
+            </div>
+            <div className='w-2/5 flex flex-col border border-y-sky-950 border-r-sky-950 rounded-r-xl p-6'>
+              <div className="w-full justify-center items-center relative h-auto ">
+                  <img
+                    src={image || (isFake ? '/fake.png' : isAuthentic ? '/authentic.jpg' : '/general.png')}
+                    alt="Article Preview"
+                    width={100}
+                    height={100}
+                    className="object-cover rounded-md w-full"
+                  />
+                  
+                  {isAuthentic && (
+                    <img
+                      src="/authentic-stamp.png"
+                      alt="Authentic Label"
+                      className="absolute top-2 right-2 w-40 h-40 opacity-90"
+                    />
+                  )}
+
+                  {isFake && (
+                    <img
+                      src="/fake-stamp.png"
+                      alt="Fake Label"
+                      className="absolute top-2 right-2 w-40 h-40 opacity-90"
+                    />
+                  )}
+                </div>
+                
+                <p className="mb-4 text-sky-950 text-xl">{getMessage()}</p>
+                
                 <div className="flex flex-col items-start gap-1 xl:gap-1 mb-4">
                   {news_type && (
                     <span className="py-1 rounded-md text-sky-950 text-l font-medium">
@@ -99,21 +119,16 @@ export default function ResultPage() {
                       Website Credibility Score: {credibilityScore.toUpperCase()}
                     </span>
                   )}
-                  {articleTitle !== null && (
-                    <span className="py-1 rounded-md text-sky-950 text-l font-medium">
-                      News Article Title: <strong>{articleTitle}</strong>
-                    </span>
-                  )}
                   
                   
-                  </div>
+                  
+                </div>
                 
               </div>
-              
-              <div className="relative max-w-full max-h-[400px] overflow-y-auto">
-                <p className="text-gray-950 whitespace-pre-line text-sm">{submittedText}</p>
-              </div>
-              <div className='w-5/5 flex justify-center items-center border rounded-[8] px-3 py-2 flex gap-3 px-4'>
+            
+          </div>
+          <div className='w-5/5 flex justify-center items-center rounded-[8] flex gap-3'>
+
                 <a
                 href={url}
                 target="_blank"
@@ -131,8 +146,6 @@ export default function ResultPage() {
                     Verify Another News
                 </a>
               </div>
-            </div>
-          </div>
         </div>
       </main>
 
