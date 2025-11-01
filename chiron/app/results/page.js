@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { use } from 'react';
 
 export default function ResultPage() {
-  const { classificationResult, fetching, classifying, textContent } = useSelector(
+  const { classificationResult, fetching, classifying, textContent, url } = useSelector(
     state => state.url
   );
   const { credibilityScore, articleTitle, submittedText } = useSelector(
@@ -104,11 +104,32 @@ export default function ResultPage() {
                       News Article Title: <strong>{articleTitle}</strong>
                     </span>
                   )}
-                </div>
+                  
+                  
+                  </div>
+                
               </div>
               
               <div className="relative max-w-full max-h-[400px] overflow-y-auto">
                 <p className="text-gray-950 whitespace-pre-line text-sm">{submittedText}</p>
+              </div>
+              <div className='w-5/5 flex justify-center items-center border rounded-[8] px-3 py-2 flex gap-3 px-4'>
+                <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-base font-semibold text-sky-950 bg-[#FFB703] rounded-lg p-2 my-2 hover:bg-[#E69A00] transition-colors w-full text-center block"
+                >
+                    Visit Page
+                </a>
+                <a
+                href={'/'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-base font-semibold text-white bg-sky-950 rounded-lg p-2 my-2 hover:bg-[#E69A00] transition-colors w-full text-center block"
+                >
+                    Verify Another News
+                </a>
               </div>
             </div>
           </div>
