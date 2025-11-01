@@ -41,13 +41,6 @@ export default function Homepage() {
     console.log("articles fetched on mount", articles.length);
   }, [dispatch, page]);
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (url) {
-      router.push(`/verify?url=${encodeURIComponent(url)}`);
-    }
-  };
-
   useEffect(() => {
     if (classificationResult && !classifying) {
       router.push('/results');
@@ -74,17 +67,17 @@ export default function Homepage() {
       }
     );
 
-    useEffect(async () => {
-      if (!isLatestHealthNews) return;
+    // useEffect(async () => {
+    //   if (!isLatestHealthNews) return;
 
-      scrollToSection();
+    //   scrollToSection();
 
-      const timer = await setTimeout(() => {
-        dispatch(setLatestHealthNews(false));
-      }, 3000);
+    //   const timer = await setTimeout(() => {
+    //     dispatch(setLatestHealthNews(false));
+    //   }, 3000);
 
-      return () => clearTimeout(timer);
-    }, [dispatch, isLatestHealthNews]);
+    //   return () => clearTimeout(timer);
+    // }, [dispatch, isLatestHealthNews]);
 
     if (observerRef.current) {
       observer.observe(observerRef.current);
