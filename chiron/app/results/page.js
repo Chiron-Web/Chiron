@@ -26,6 +26,26 @@ export default function ResultPage() {
     return 'BEWARE: This content is not a health article';
   };
 
+  const getContainerBg = () => {
+    if(isAuthentic) {
+      return "bg-gradient-to-b from-green-100 to-white border";
+    } else if (isFake) {
+      return "bg-gradient-to-b from-red-100 to-white border"
+    } else {
+      return "bg-gradient-to-b from-blue-100 to-white border"
+    }
+  }
+
+  const getTextBg = () => {
+    if(isAuthentic) {
+      return "bg-green-500 px-1";
+    } else if (isFake) {
+      return "bg-red-500 px-1"
+    } else {
+      return "bg-blue-500 px-1"
+    }
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-100 to-white">
       <Header />
@@ -44,7 +64,7 @@ export default function ResultPage() {
         <div className="w-[90%] max-w-7xl flex flex-col">
 
           <div className="flex flex-row items-start h-full mb-5">
-            <div className={`w-3/5 h-full flex gap-4 p-4 flex-col items-center justify-center bg-gradient-to-b from-green-100 to-white border border-sky-950 rounded-l-xl p-6`}>
+            <div className={`w-3/5 h-full flex gap-4 p-4 flex-col items-center justify-center ${getContainerBg()} border-sky-950 rounded-l-xl p-6`}>
               
               
               {articleTitle !== null && (
@@ -56,7 +76,7 @@ export default function ResultPage() {
               <div className="relative max-w-full h-full overflow-y-auto">
                 <p className="text-gray-950 whitespace-pre-line text-m">
                   {submittedText.split(" ").map((word, index) => (
-                    <span key={index} className="bg-green-500 px-1">
+                    <span key={index} className={`${getTextBg()}`}>
                       {word}{" "}
                     </span>
                   ))}
