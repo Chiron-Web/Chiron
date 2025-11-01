@@ -7,6 +7,7 @@ const initialUrlState = {
     classifying: false,
     classificationResult: null,
     scrapingResult: null,
+    isLatestHealthNews: false,
 };
 
 const urlSlice = createSlice({
@@ -21,6 +22,9 @@ const urlSlice = createSlice({
         },
         setFetchingStatus: (state, action) => {
             state.fetching = action.payload;
+        },
+        setLatestHealthNews: (action) => {
+            state.isLatestHealthNews = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -102,7 +106,7 @@ export const classifyContent = createAsyncThunk(
   }
 );
 
-export const { addUrl, addContent, setFetchingStatus } = urlSlice.actions;
+export const { addUrl, addContent, setFetchingStatus, setLatestHealthNews } = urlSlice.actions;
 export {scrapeContent, classifyContent};
 
 export const urlReducer = urlSlice.reducer;
