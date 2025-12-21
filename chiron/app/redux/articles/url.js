@@ -47,7 +47,7 @@ const urlSlice = createSlice({
     }
 });
 
-export const scrapeContent = createAsyncThunk(
+const scrapeContent = createAsyncThunk(
   'url/scrapeContent',
   async (url) => {
     try {
@@ -74,7 +74,7 @@ export const scrapeContent = createAsyncThunk(
   }
 )
 
-export const classifyContent = createAsyncThunk(
+const classifyContent = createAsyncThunk(
   'url/classifyContent',
   async (text) => {
     try {

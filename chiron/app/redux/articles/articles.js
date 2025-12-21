@@ -34,7 +34,7 @@ const articlesSlice = createSlice({
   }
 });
 
-export const fetchArticles = createAsyncThunk(
+const fetchArticles = createAsyncThunk(
     'articles/fetchArticles',
     async ({ pageNum, fetchUrl, pageSize }) => {
       
