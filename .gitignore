@@ -4,3 +4,4 @@ Service/node-service/.env
 /Service/node-service/node_modules
 /Service/node-service/node_modules
 /Service/python-service/chiron-classify
+/node_modules
