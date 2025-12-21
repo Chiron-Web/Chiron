@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import NewsGrid from './newsGrid';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchArticles, setIsArticleLoading, incrementPage } from '../redux/articles/articles';
-import { scrapeContent, classifyContent, addContent, addUrl } from '../redux/articles/url';  
+import { scrapeContent, classifyContent, addContent, addUrl, setLatestHealthNews } from '../redux/articles/url';  
 
 const delay = (timeoutTime) => {
   setTimeout(() => {
@@ -22,27 +22,24 @@ export default function Homepage() {
   const observerRef = useRef(null);
   const router = useRouter();
   const dispatch = useDispatch();
-  const { page, articles, hasMore, isArticleLoading } = useSelector(
+  const { page, articles, hasMore, isArticleLoading, isLatestHealthNews } = useSelector(
     state => state.articles
   );
   const { classificationResult, fetching, classifying, textContent } = useSelector(
     state => state.url
   );
   const [isUrlTab, setIsUrlTab] = useState(true);
+  const targetRef = useRef(null);
+
+  const scrollToSection = () => {
+    targetRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     // fetch page 1 on mount
     dispatch(fetchArticles({ pageNum: page, fetchUrl: FETCH_ARTICLE_URL, pageSize: PAGE_SIZE }));
     console.log("articles fetched on mount", articles.length);
   }, [dispatch, page]);
-
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (url) {
-      router.push(`/verify?url=${encodeURIComponent(url)}`);
-    }
-  };
 
   useEffect(() => {
     if (classificationResult && !classifying) {
@@ -69,6 +66,18 @@ export default function Homepage() {
         threshold: 1.0,
       }
     );
+
+    // useEffect(async () => {
+    //   if (!isLatestHealthNews) return;
+
+    //   scrollToSection();
+
+    //   const timer = await setTimeout(() => {
+    //     dispatch(setLatestHealthNews(false));
+    //   }, 3000);
+
+    //   return () => clearTimeout(timer);
+    // }, [dispatch, isLatestHealthNews]);
 
     if (observerRef.current) {
       observer.observe(observerRef.current);
@@ -165,7 +174,7 @@ export default function Homepage() {
       {/* This div is the trigger for loading the news */}
       <div ref={observerRef} className="h-1 mt-20" />
       <div className='w-full flex items-center justify-center'>
-        <hr className='text-sky-950 w-[90%] items-center justify-center'></hr>
+        <hr ref={targetRef} className='text-sky-950 w-[90%] items-center justify-center'></hr>
       </div>
       
       {showNews && <NewsGrid
