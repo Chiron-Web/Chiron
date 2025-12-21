@@ -4,7 +4,9 @@
     "api2": "cd Service/node-service && node scraper.js",
     "api3": "cd Service/node-service/cron-server && node cron.js",
     "frontend": "cd chiron && npm run dev",
-
     "start:all": "start cmd /k \"npm run api1\" && start cmd /k \"npm run api2\" && start cmd /k \"npm run frontend\" && start cmd /k \"npm run api3\""
+  },
+  "dependencies": {
+    "react-router-dom": "^7.9.5"
   }
 }
