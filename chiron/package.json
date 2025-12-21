@@ -7,17 +7,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-
     "api1": "cd api1 && npm run dev",
     "api2": "cd api2 && npm run dev",
     "frontend": "",
-
     "start:all": "start cmd /k \"npm run api1\" && start cmd /k \"npm run api2\" && start cmd /k \"npm run frontend\""
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
     "fs": "^0.0.1-security",
-    "next": "15.3.2",
+    "next": "^15.3.3",
     "postcss": "^8.5.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
