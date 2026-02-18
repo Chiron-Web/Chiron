@@ -2,10 +2,11 @@ const NewsArticle = require('../models/newsArticle');
 const fetchGoogleHealthNewsRSS = require('../utils/rssFetcher');
 const puppeteer = require('puppeteer');
 
+
 // Call your classifier API
 const classify = async (text) => {
     try {
-      const res = await fetch('http://localhost:5000/classify', {
+      const res = await fetch(process.env.CLASSIFIER_URI ? `${process.env.CLASSIFIER_URI}/classify` : 'http://localhost:5000/classify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text })
@@ -30,7 +31,7 @@ async function fetchAndStoreArticles() {
   
       let scraped;
       try {
-        const res = await fetch('http://localhost:4000/scrape', {
+        const res = await fetch(process.env.SCRAPER_URI ? `${process.env.SCRAPER_URI}/scrape` : 'http://localhost:4000/scrape', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url: article.link })
