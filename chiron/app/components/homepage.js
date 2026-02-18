@@ -14,7 +14,7 @@ const delay = (timeoutTime) => {
 }
 
 export default function Homepage() {
-  const FETCH_ARTICLE_URL = process.env.SERVER_URI ? `${process.env.SERVER_URI}/news/articles` : 'localhost:8080/news/articles';
+  const FETCH_ARTICLE_URL = process.env.SERVER_URI ? `${process.env.SERVER_URI}/news/articles` : 'http://localhost:8080/news/articles';
   const PAGE_SIZE = 9;
   const [url, setUrl] = useState('');
   const [content, setContent] = useState('');
