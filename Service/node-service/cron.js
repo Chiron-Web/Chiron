@@ -6,6 +6,7 @@ const cors = require('cors');
 const express = require('express');
 const path = require('path');
 require('dotenv').config({path: path.resolve(__dirname, '../../.env')});
+console.log("MONGODB_URI in CRON server:", process.env.MONGODB_URI);
 const app = express();
 
 // Middleware
