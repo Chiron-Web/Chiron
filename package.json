@@ -2,9 +2,10 @@
   "scripts": {
     "api1": "cd Service/python-service && python app.py",
     "api2": "cd Service/node-service && node scraper.js",
-    "api3": "cd Service/node-service/cron-server && node cron.js",
+    "api3": "cd Service/node-service && node cron.js",
+    "api4": "cd Service/node-service && node server.js",
     "frontend": "cd chiron && npm run dev",
-    "start:all": "start cmd /k \"npm run api1\" && start cmd /k \"npm run api2\" && start cmd /k \"npm run frontend\" && start cmd /k \"npm run api3\""
+    "start:all": "start cmd /k \"npm run api1\" && start cmd /k \"npm run api2\" && start cmd /k \"npm run frontend\" && start cmd /k \"npm run api3\" && start cmd /k \"npm run api4\""
   },
   "dependencies": {
     "react-router-dom": "^7.9.5"

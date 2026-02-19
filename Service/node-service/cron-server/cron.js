@@ -1,5 +1,5 @@
 // cron-server/index.js
-require('dotenv').config();
+const path = require('path');
 const mongoose = require('mongoose');
 const cron = require('node-cron');
 const { fetchAndStoreArticles } = require('../controllers/newsController');
