@@ -51,7 +51,6 @@ const scrapeContent = createAsyncThunk(
   'url/scrapeContent',
   async (url) => {
     try {
-      console.log("Scraping URL: ", url);
       const response = await fetch('http://localhost:4000/scrape', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -60,7 +59,6 @@ const scrapeContent = createAsyncThunk(
 
       if (!response.ok) throw new Error('Failed to fetch content');
       const data = await response.json();
-      console.log("Scraped: ", data)
 
       if (data.success && data.content) {
         data.content = `${data.title || ''} ${data.content || ''}`;
@@ -78,8 +76,6 @@ const classifyContent = createAsyncThunk(
   'url/classifyContent',
   async (text) => {
     try {
-      console.log("Classifying content for:", text);
-
       const response = await fetch('http://127.0.0.1:5000/classify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -97,7 +93,6 @@ const classifyContent = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log("Classification result:", data);
       return data;
     } catch (error) {
       console.error('Error during classification:', error);

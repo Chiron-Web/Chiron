@@ -39,7 +39,6 @@ const fetchArticles = createAsyncThunk(
     async ({ pageNum, fetchUrl, pageSize }) => {
       
         try {
-          console.log(`Inside thunk: Fetching articles for page ${pageNum}: ${fetchUrl}?page=${pageNum}&pageSize=${pageSize}`);
           const response = await fetch(`${fetchUrl}?page=${pageNum}&pageSize=${pageSize}`);
           const data = await response.json();
 
