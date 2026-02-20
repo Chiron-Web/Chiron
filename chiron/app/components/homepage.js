@@ -6,6 +6,7 @@ import NewsGrid from './newsGrid';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchArticles, setIsArticleLoading, incrementPage } from '../redux/articles/articles';
 import { scrapeContent, classifyContent, addContent, addUrl, setLatestHealthNews } from '../redux/articles/url';  
+import { SERVER_URI } from '../utils/config';
 
 const delay = (timeoutTime) => {
   setTimeout(() => {
@@ -14,7 +15,7 @@ const delay = (timeoutTime) => {
 }
 
 export default function Homepage() {
-  const FETCH_ARTICLE_URL = process.env.SERVER_URI ? `${process.env.SERVER_URI}/news/articles` : 'http://localhost:8080/news/articles';
+  const FETCH_ARTICLE_URL = SERVER_URI ? `${SERVER_URI}/news/articles` : 'http://localhost:8080/news/articles';
   const PAGE_SIZE = 9;
   const [url, setUrl] = useState('');
   const [content, setContent] = useState('');
